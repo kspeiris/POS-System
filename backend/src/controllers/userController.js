@@ -1,5 +1,8 @@
 
+import mongoose from 'mongoose';
 import User from '../models/User.js';
+
+const isValidObjectId = (value) => mongoose.Types.ObjectId.isValid(value);
 
 // @desc    Get all users
 // @route   GET /api/users
@@ -57,6 +60,10 @@ export const createUser = async (req, res) => {
 // @access  Private/Admin
 export const updateUserStatus = async (req, res) => {
     try {
+        if (!isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: 'Invalid user id' });
+        }
+
         const user = await User.findById(req.params.id);
 
         if (user) {

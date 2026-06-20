@@ -1,5 +1,8 @@
 
+import mongoose from 'mongoose';
 import Product from '../models/Product.js';
+
+const isValidObjectId = (value) => mongoose.Types.ObjectId.isValid(value);
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -18,6 +21,10 @@ export const getProducts = async (req, res) => {
 // @access  Private
 export const getProductById = async (req, res) => {
     try {
+        if (!isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: 'Invalid product id' });
+        }
+
         const product = await Product.findById(req.params.id);
         if (product) {
             res.json(product);
@@ -64,6 +71,10 @@ export const createProduct = async (req, res) => {
 // @access  Private/Admin
 export const updateProduct = async (req, res) => {
     try {
+        if (!isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: 'Invalid product id' });
+        }
+
         const { name, price, category, stockQty, description, imageUrl, isAvailable } = req.body;
 
         const product = await Product.findById(req.params.id);
@@ -92,6 +103,10 @@ export const updateProduct = async (req, res) => {
 // @access  Private/Admin
 export const deleteProduct = async (req, res) => {
     try {
+        if (!isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: 'Invalid product id' });
+        }
+
         const product = await Product.findById(req.params.id);
 
         if (product) {

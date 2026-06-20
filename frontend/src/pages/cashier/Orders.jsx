@@ -39,11 +39,12 @@ export default function Orders() {
     if (isLoading) return <Loader fullPage />;
 
     return (
-        <div className="p-6 max-w-7xl mx-auto space-y-6">
+        <div className="max-w-7xl mx-auto space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-dark">Order History</h1>
-                    <p className="text-gray-500 text-sm">View and manage all your past orders</p>
+                    <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Orders</p>
+                    <h1 className="text-3xl font-bold text-dark mt-1">Order History</h1>
+                    <p className="text-slate-500 text-sm">View and manage all your past orders.</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <Button variant="secondary" className="flex items-center gap-2">
@@ -110,7 +111,7 @@ export default function Orders() {
                 </Table>
 
                 {filteredOrders.length === 0 && (
-                    <div className="p-12 text-center text-gray-500">
+                    <div className="p-12 text-center text-slate-500">
                         No orders found matching your search.
                     </div>
                 )}

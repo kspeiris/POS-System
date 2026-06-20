@@ -19,6 +19,7 @@ export default function Users() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
     const [formData, setFormData] = useState({ name: '', email: '', role: 'cashier', password: '' });
+    const [feedback, setFeedback] = useState('');
 
     const fetchUsers = async () => {
         try {
@@ -53,18 +54,24 @@ export default function Users() {
             fetchUsers();
             setIsModalOpen(false);
         } catch (error) {
-            alert(error.response?.data?.message || 'Failed to save user');
+            setFeedback(error.response?.data?.message || 'Failed to save user');
         }
     };
 
     if (isLoading) return <Loader fullPage />;
 
     return (
-        <div className="p-6 space-y-6">
+        <div className="space-y-6">
+            {feedback && (
+                <div className="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    {feedback}
+                </div>
+            )}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-dark">User Management</h1>
-                    <p className="text-gray-500 text-sm">Manage staff access and permissions</p>
+                    <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Staff</p>
+                    <h1 className="text-3xl font-bold text-dark mt-1">User Management</h1>
+                    <p className="text-slate-500 text-sm">Manage staff access and permissions.</p>
                 </div>
                 <Button className="flex items-center gap-2" onClick={() => openModal()}>
                     <Plus size={18} />

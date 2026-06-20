@@ -18,6 +18,7 @@ export default function ProductForm() {
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [feedback, setFeedback] = useState('');
 
     const [formData, setFormData] = useState({
         name: '',
@@ -83,7 +84,7 @@ export default function ProductForm() {
             }
             navigate('/admin/products');
         } catch (error) {
-            alert(error.response?.data?.message || 'Failed to save product');
+            setFeedback(error.response?.data?.message || 'Failed to save product');
         } finally {
             setIsSaving(false);
         }
@@ -93,6 +94,11 @@ export default function ProductForm() {
 
     return (
         <div className="max-w-4xl mx-auto space-y-6">
+            {feedback && (
+                <div className="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    {feedback}
+                </div>
+            )}
             <div className="flex items-center gap-4">
                 <button
                     onClick={() => navigate('/admin/products')}

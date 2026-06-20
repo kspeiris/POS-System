@@ -14,16 +14,14 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsProcessing(true);
-        // Simulate processing
-        setTimeout(() => {
+        Promise.resolve(
             onConfirm({
                 paymentMethod,
                 amountReceived: parseFloat(amountReceived),
                 change: Math.max(0, change),
                 total
-            });
-            setIsProcessing(false);
-        }, 1500);
+            })
+        ).finally(() => setIsProcessing(false));
     };
 
     const paymentMethods = [
@@ -34,7 +32,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="Complete Checkout" size="md">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6 max-h-[80vh] overflow-y-auto pr-1">
                 {/* Total Display */}
                 <div className="bg-primary/5 p-6 rounded-2xl text-center border border-primary/10">
                     <p className="text-sm font-medium text-primary uppercase tracking-wider mb-1">Total Amount Due</p>
@@ -43,22 +41,22 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
 
                 {/* Payment Methods */}
                 <div className="space-y-3">
-                    <label className="text-sm font-semibold text-gray-700">Select Payment Method</label>
+                    <label className="text-sm font-semibold text-slate-700">Select Payment Method</label>
                     <div className="grid grid-cols-3 gap-3">
                         {paymentMethods.map((method) => (
                             <button
                                 key={method.id}
                                 type="button"
                                 onClick={() => setPaymentMethod(method.id)}
-                                className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all gap-2 ${paymentMethod === method.id
+                            className={`flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all gap-2 ${paymentMethod === method.id
                                         ? 'border-primary bg-primary/5 ring-4 ring-primary/10'
-                                        : 'border-gray-100 bg-white hover:border-gray-200'
+                                        : 'border-slate-100 bg-white hover:border-slate-200'
                                     }`}
                             >
                                 <div className={`p-2 rounded-lg ${method.color}`}>
                                     <method.icon size={20} />
                                 </div>
-                                <span className={`text-xs font-bold ${paymentMethod === method.id ? 'text-primary' : 'text-gray-500'}`}>
+                                <span className={`text-xs font-bold ${paymentMethod === method.id ? 'text-primary' : 'text-slate-500'}`}>
                                     {method.label}
                                 </span>
                             </button>
@@ -70,7 +68,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                 {paymentMethod === 'cash' && (
                     <div className="space-y-4 animate-in slide-in-from-top-2 duration-300">
                         <div className="space-y-2">
-                            <label className="text-sm font-semibold text-gray-700">Amount Received</label>
+                            <label className="text-sm font-semibold text-slate-700">Amount Received</label>
                             <div className="relative">
                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">$</span>
                                 <input
@@ -78,7 +76,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                                     step="0.01"
                                     value={amountReceived}
                                     onChange={(e) => setAmountReceived(e.target.value)}
-                                    className="w-full bg-gray-50 border-none rounded-xl py-4 pl-8 pr-4 text-2xl font-bold focus:ring-2 focus:ring-primary transition-all"
+                                    className="w-full bg-slate-50 border-none rounded-2xl py-4 pl-8 pr-4 text-2xl font-bold focus:ring-2 focus:ring-primary transition-all"
                                     placeholder="0.00"
                                     autoFocus
                                 />
@@ -92,7 +90,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                                     key={amount}
                                     type="button"
                                     onClick={() => setAmountReceived(amount.toString())}
-                                    className="flex-1 py-2 bg-white border border-gray-200 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all"
+                                    className="flex-1 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all"
                                 >
                                     ${amount}
                                 </button>
