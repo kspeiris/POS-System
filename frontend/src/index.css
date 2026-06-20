@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: #0f766e;
+    --primary-hover: #115e59;
+    --secondary: #f59e0b;
+    --dark: #0f172a;
+    --gray: #64748b;
+    --light: #f8fafc;
+    --white: #ffffff;
+    --border: #dbe4ee;
+    --surface: rgba(255, 255, 255, 0.84);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-light text-dark font-sans antialiased;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 28%),
+      radial-gradient(circle at top right, rgba(245, 158, 11, 0.10), transparent 24%),
+      linear-gradient(180deg, #f8fafc 0%, #f3f7fb 100%);
+  }
+
+  /* Smooth scrollbar for Chrome/Safari */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray/20 rounded-full hover:bg-gray/40 transition-colors;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    @apply outline-none;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .glass {
+    background: var(--surface);
+    @apply backdrop-blur-md border border-white/40 shadow-[0_20px_60px_rgba(15,23,42,0.08)];
+  }
+
+  .surface {
+    @apply bg-white/90 backdrop-blur border border-white/60 shadow-[0_12px_40px_rgba(15,23,42,0.08)];
+  }
+
+  .page-shell {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+}
