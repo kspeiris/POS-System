@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { CreditCard, Banknote, QrCode, ArrowRight } from 'lucide-react';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
+import { formatLKR } from '../../utils/money';
 
 export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
     const [paymentMethod, setPaymentMethod] = useState('cash');
@@ -36,7 +37,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                 {/* Total Display */}
                 <div className="bg-primary/5 p-6 rounded-2xl text-center border border-primary/10">
                     <p className="text-sm font-medium text-primary uppercase tracking-wider mb-1">Total Amount Due</p>
-                    <h2 className="text-4xl font-black text-primary">${total.toFixed(2)}</h2>
+                    <h2 className="text-4xl font-black text-primary">{formatLKR(total)}</h2>
                 </div>
 
                 {/* Payment Methods */}
@@ -70,7 +71,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-slate-700">Amount Received</label>
                             <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">$</span>
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">LKR</span>
                                 <input
                                     type="number"
                                     step="0.01"
@@ -92,7 +93,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                                     onClick={() => setAmountReceived(amount.toString())}
                                     className="flex-1 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all"
                                 >
-                                    ${amount}
+                                    LKR {amount}
                                 </button>
                             ))}
                         </div>
@@ -100,7 +101,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                         {/* Change Display */}
                         <div className={`p-4 rounded-xl flex justify-between items-center ${change >= 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
                             <span className="text-sm font-medium">Change to return:</span>
-                            <span className="text-xl font-bold">${Math.max(0, change).toFixed(2)}</span>
+                            <span className="text-xl font-bold">{formatLKR(Math.max(0, change))}</span>
                         </div>
                     </div>
                 )}

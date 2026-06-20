@@ -7,6 +7,7 @@ import Button from '../../components/ui/Button';
 import Badge from '../../components/ui/Badge';
 import Loader from '../../components/ui/Loader';
 import dayjs from 'dayjs';
+import { formatLKR } from '../../utils/money';
 
 import axios from '../../api/axios';
 
@@ -34,13 +35,16 @@ export default function ReportsDaily() {
     }, [selectedDate]);
 
     const stats = reportData ? [
-        { label: 'Total Sales', value: `$${reportData.totalSales.toLocaleString()}`, icon: TrendingUp, color: 'text-primary bg-primary/10' },
+        { label: 'Total Sales', value: formatLKR(reportData.totalSales), icon: TrendingUp, color: 'text-primary bg-primary/10' },
         { label: 'Total Orders', value: reportData.totalOrders.toLocaleString(), icon: ShoppingBag, color: 'text-green-600 bg-green-50' },
-        { label: 'Avg Order', value: `$${(reportData.avgOrderValue ?? (reportData.totalOrders ? reportData.totalSales / reportData.totalOrders : 0)).toFixed(2)}`, icon: CreditCard, color: 'text-blue-600 bg-blue-50' },
+        { label: 'Avg Order', value: formatLKR(reportData.avgOrderValue ?? (reportData.totalOrders ? reportData.totalSales / reportData.totalOrders : 0)), icon: CreditCard, color: 'text-blue-600 bg-blue-50' },
         { label: 'Canceled', value: '0', icon: RotateCcw, color: 'text-danger bg-red-50' },
     ] : [];
 
     if (isLoading) return <Loader fullPage />;
+
+    const salesByCategory = reportData?.salesByCategory || [];
+    const recentOrders = reportData?.recentOrders || [];
 
     return (
         <div className="space-y-6">
@@ -62,9 +66,9 @@ export default function ReportsDaily() {
                         onChange={(e) => setSelectedDate(e.target.value)}
                         className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                     />
-                    <Button variant="secondary" className="flex items-center gap-2">
+                    <Button variant="secondary" className="flex items-center gap-2" onClick={() => window.print()}>
                         <Download size={18} />
-                        Download PDF
+                        Print / Save PDF
                     </Button>
                 </div>
             </div>
@@ -89,11 +93,11 @@ export default function ReportsDaily() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card title="Sales by Category" className="lg:col-span-1">
                     <div className="space-y-4">
-                        {(reportData.salesByCategory || []).map((item, idx) => (
+                        {salesByCategory.map((item, idx) => (
                             <div key={idx} className="space-y-1">
                                 <div className="flex justify-between text-sm">
                                     <span className="font-medium text-dark">{item.category}</span>
-                                    <span className="text-slate-500">${item.sales.toFixed(2)}</span>
+                                    <span className="text-slate-500">{formatLKR(item.sales)}</span>
                                 </div>
                                 <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
                                     <div
@@ -103,7 +107,7 @@ export default function ReportsDaily() {
                                 </div>
                             </div>
                         ))}
-                        {(reportData.salesByCategory || []).length === 0 && (
+                        {salesByCategory.length === 0 && (
                             <p className="text-sm text-slate-500 text-center py-4">No data available</p>
                         )}
                     </div>
@@ -111,19 +115,19 @@ export default function ReportsDaily() {
 
                 <Card title="Recent Transactions" className="lg:col-span-2" noPadding>
                     <Table headers={['Time', 'Order ID', 'Items', 'Total', 'Payment']}>
-                        {(reportData.recentOrders || []).map((tx) => (
+                        {recentOrders.map((tx) => (
                             <TableRow key={tx._id}>
                                 <TableCell className="text-slate-500">{dayjs(tx.createdAt).format('HH:mm')}</TableCell>
                                 <TableCell className="font-bold text-primary">{tx.orderNo}</TableCell>
                                 <TableCell>{tx.items.length} items</TableCell>
-                                <TableCell className="font-bold">${tx.total.toFixed(2)}</TableCell>
+                                <TableCell className="font-bold">{formatLKR(tx.total)}</TableCell>
                                 <TableCell>
                                     <Badge variant="neutral">{tx.payment.method}</Badge>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </Table>
-                    {(reportData.recentOrders || []).length === 0 && (
+                    {recentOrders.length === 0 && (
                         <p className="text-sm text-slate-500 text-center py-10">No transactions today</p>
                     )}
                 </Card>

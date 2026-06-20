@@ -1,12 +1,15 @@
 
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { orderApi } from '../../api/orderApi';
 import Loader from '../../components/ui/Loader';
+import { formatLKR } from '../../utils/money';
 
 export default function Receipt() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [order, setOrder] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -53,16 +56,16 @@ export default function Receipt() {
             {/* Action Bar (Hidden on print) */}
             <div className="mb-6 flex gap-4 print:hidden">
                 <button
-                    onClick={() => window.close()}
+                    onClick={() => navigate('/orders')}
                     className="px-6 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50"
                 >
-                    Close
+                    Back to Orders
                 </button>
                 <button
                     onClick={handlePrint}
                     className="px-6 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-hover shadow-lg shadow-primary/20"
                 >
-                    Print Receipt
+                    Print / Save PDF
                 </button>
             </div>
 
@@ -94,9 +97,9 @@ export default function Receipt() {
                         <div key={idx} className="flex justify-between text-sm">
                             <div className="flex-1">
                                 <p className="font-medium text-dark">{item.name}</p>
-                                <p className="text-xs text-gray-500">{item.quantity} x ${item.price.toFixed(2)}</p>
+                                <p className="text-xs text-gray-500">{item.quantity} x {formatLKR(item.price)}</p>
                             </div>
-                            <p className="font-semibold text-dark">${item.subtotal.toFixed(2)}</p>
+                            <p className="font-semibold text-dark">{formatLKR(item.subtotal)}</p>
                         </div>
                     ))}
                 </div>
@@ -104,26 +107,26 @@ export default function Receipt() {
                 <div className="border-t border-dashed border-gray-200 pt-4 space-y-2 mb-8">
                     <div className="flex justify-between text-sm">
                         <span>Subtotal:</span>
-                        <span>${displayOrder.subtotal.toFixed(2)}</span>
+                        <span>{formatLKR(displayOrder.subtotal)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                         <span>Tax (10%):</span>
-                        <span>${displayOrder.tax.toFixed(2)}</span>
+                        <span>{formatLKR(displayOrder.tax)}</span>
                     </div>
                     <div className="flex justify-between text-lg font-bold text-dark pt-2">
                         <span>TOTAL:</span>
-                        <span>${displayOrder.total.toFixed(2)}</span>
+                        <span>{formatLKR(displayOrder.total)}</span>
                     </div>
                 </div>
 
                 <div className="space-y-1 mb-8 text-xs text-gray-600">
                     <div className="flex justify-between">
                         <span>Paid:</span>
-                        <span>${displayOrder.amountPaid.toFixed(2)}</span>
+                        <span>{formatLKR(displayOrder.amountPaid)}</span>
                     </div>
                     <div className="flex justify-between font-bold text-dark">
                         <span>Change:</span>
-                        <span>${displayOrder.change.toFixed(2)}</span>
+                        <span>{formatLKR(displayOrder.change)}</span>
                     </div>
                 </div>
 

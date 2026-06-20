@@ -6,6 +6,7 @@ import CheckoutModal from './CheckoutModal';
 import { useNavigate } from 'react-router-dom';
 import { orderApi } from '../../api/orderApi';
 import Button from '../ui/Button';
+import { formatLKR } from '../../utils/money';
 
 export default function CartPanel() {
     const { cart, removeFromCart, updateQuantity, subtotal, tax, total, clearCart } = useCart();
@@ -83,7 +84,7 @@ export default function CartPanel() {
                             <div className="flex-1 flex flex-col justify-between">
                                 <div>
                                     <h4 className="font-semibold text-dark text-sm line-clamp-1">{item.name}</h4>
-                                    <p className="text-xs text-slate-500">${item.price.toFixed(2)} / unit</p>
+                                    <p className="text-xs text-slate-500">{formatLKR(item.price)} / unit</p>
                                 </div>
 
                                 <div className="flex items-center justify-between">
@@ -103,7 +104,7 @@ export default function CartPanel() {
                                         </button>
                                     </div>
                                     <span className="font-bold text-dark text-sm">
-                                        ${(item.price * item.quantity).toFixed(2)}
+                                        {formatLKR(item.price * item.quantity)}
                                     </span>
                                 </div>
                             </div>
@@ -129,15 +130,15 @@ export default function CartPanel() {
                 <div className="space-y-2 mb-4">
                     <div className="flex justify-between text-slate-500 text-sm">
                         <span>Subtotal</span>
-                        <span>${subtotal.toFixed(2)}</span>
+                        <span>{formatLKR(subtotal)}</span>
                     </div>
                     <div className="flex justify-between text-slate-500 text-sm">
                         <span>Tax (10%)</span>
-                        <span>${tax.toFixed(2)}</span>
+                        <span>{formatLKR(tax)}</span>
                     </div>
                     <div className="flex justify-between text-dark font-bold text-lg pt-2 border-t border-dashed border-slate-200">
                         <span>Total</span>
-                        <span className="text-primary">${total.toFixed(2)}</span>
+                        <span className="text-primary">{formatLKR(total)}</span>
                     </div>
                 </div>
 
@@ -155,7 +156,7 @@ export default function CartPanel() {
                         disabled={cart.length === 0}
                         className="px-4 py-3 bg-primary text-white rounded-xl hover:bg-primary-hover font-semibold text-sm shadow-lg shadow-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Charge ${(total).toFixed(2)}
+                        Charge {formatLKR(total)}
                     </Button>
                 </div>
             </div>
