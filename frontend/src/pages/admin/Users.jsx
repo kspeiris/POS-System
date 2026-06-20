@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import dayjs from 'dayjs';
 import { Plus, Edit2, Trash2, Mail, Shield, User } from 'lucide-react';
 import Card from '../../components/ui/Card';
 import Table, { TableRow, TableCell } from '../../components/ui/Table';
@@ -9,9 +10,8 @@ import Badge from '../../components/ui/Badge';
 import Modal from '../../components/ui/Modal';
 import Loader from '../../components/ui/Loader';
 
-const ROLES = ['admin', 'cashier'];
-
 import { userApi } from '../../api/userApi';
+const ROLES = ['admin', 'cashier'];
 
 export default function Users() {
     const [isLoading, setIsLoading] = useState(true);

@@ -4,6 +4,7 @@ import {
     createOrder,
     getOrderById,
     getOrders,
+    getOrderReceipt,
 } from '../controllers/orderController.js';
 import { protect } from '../middleware/auth.js';
 
@@ -15,5 +16,7 @@ router.route('/')
 
 router.route('/:id')
     .get(protect, getOrderById);
+
+router.get('/:id/receipt', protect, getOrderReceipt);
 
 export default router;
