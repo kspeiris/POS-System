@@ -1,39 +1,43 @@
 
 import { useState } from 'react';
-import { User, Mail, Shield, Camera, Key, LogOut } from 'lucide-react';
+import { User, Camera, Key, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Badge from '../../components/ui/Badge';
+import Modal from '../../components/ui/Modal';
 
 export default function Profile() {
     const { user, logout } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
+    const [isPasswordOpen, setIsPasswordOpen] = useState(false);
+    const [formState, setFormState] = useState({
+        name: user?.name || '',
+        email: user?.email || '',
+    });
 
     return (
-        <div className="p-6 max-w-4xl mx-auto space-y-6">
-            <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-dark">My Profile</h1>
-                <Button
-                    variant="ghost"
-                    className="text-red-500 hover:bg-red-50"
-                    onClick={logout}
-                >
+        <div className="max-w-4xl mx-auto space-y-6">
+            <div className="flex items-center justify-between gap-4">
+                <div>
+                    <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Account</p>
+                    <h1 className="text-3xl font-bold text-dark mt-1">My Profile</h1>
+                </div>
+                <Button variant="ghost" className="text-red-500 hover:bg-red-50" onClick={logout}>
                     <LogOut size={18} className="mr-2" />
                     Sign Out
                 </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* User Avatar Card */}
                 <div className="md:col-span-1">
                     <Card className="text-center">
                         <div className="relative inline-block mb-4">
                             <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary border-4 border-white shadow-lg overflow-hidden">
                                 <User size={48} />
                             </div>
-                            <button className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-md border border-gray-100 text-gray-400 hover:text-primary transition-all">
+                            <button type="button" className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-md border border-gray-100 text-gray-400 hover:text-primary transition-all">
                                 <Camera size={16} />
                             </button>
                         </div>
@@ -45,22 +49,31 @@ export default function Profile() {
                     </Card>
                 </div>
 
-                {/* Account Details */}
                 <div className="md:col-span-2 space-y-6">
                     <Card title="Account Settings">
                         <form className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <Input label="Full Name" defaultValue={user?.name} disabled={!isEditing} />
-                                <Input label="Email Address" defaultValue={user?.email} disabled={!isEditing} />
+                                <Input
+                                    label="Full Name"
+                                    value={formState.name}
+                                    onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                                    disabled={!isEditing}
+                                />
+                                <Input
+                                    label="Email Address"
+                                    value={formState.email}
+                                    onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                                    disabled={!isEditing}
+                                />
                             </div>
                             <div className="pt-4 flex justify-end gap-3">
                                 {isEditing ? (
                                     <>
-                                        <Button variant="ghost" onClick={() => setIsEditing(false)}>Cancel</Button>
-                                        <Button onClick={() => setIsEditing(false)}>Save Changes</Button>
+                                        <Button variant="ghost" type="button" onClick={() => setIsEditing(false)}>Cancel</Button>
+                                        <Button type="button" onClick={() => setIsEditing(false)}>Save Changes</Button>
                                     </>
                                 ) : (
-                                    <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+                                    <Button type="button" onClick={() => setIsEditing(true)}>Edit Profile</Button>
                                 )}
                             </div>
                         </form>
@@ -68,9 +81,9 @@ export default function Profile() {
 
                     <Card title="Security" subtitle="Manage your password and authentication">
                         <div className="space-y-4">
-                            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white rounded-lg text-gray-400">
+                                    <div className="p-2 bg-white rounded-xl text-slate-400">
                                         <Key size={20} />
                                     </div>
                                     <div>
@@ -78,12 +91,28 @@ export default function Profile() {
                                         <p className="text-xs text-gray-500">Last changed 3 months ago</p>
                                     </div>
                                 </div>
-                                <Button variant="secondary" size="sm">Update</Button>
+                                <Button variant="secondary" size="sm" type="button" onClick={() => setIsPasswordOpen(true)}>Update</Button>
                             </div>
                         </div>
                     </Card>
                 </div>
             </div>
+
+            <Modal isOpen={isPasswordOpen} onClose={() => setIsPasswordOpen(false)} title="Change Password">
+                <form className="space-y-4">
+                    <Input label="Current Password" type="password" />
+                    <Input label="New Password" type="password" />
+                    <Input label="Confirm New Password" type="password" />
+                    <div className="pt-4 flex gap-3">
+                        <Button variant="ghost" type="button" className="flex-1" onClick={() => setIsPasswordOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button type="button" className="flex-1" onClick={() => setIsPasswordOpen(false)}>
+                            Save Password
+                        </Button>
+                    </div>
+                </form>
+            </Modal>
         </div>
     );
 }

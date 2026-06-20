@@ -1,6 +1,9 @@
 
+import mongoose from 'mongoose';
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
+
+const isValidObjectId = (value) => mongoose.Types.ObjectId.isValid(value);
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -8,7 +11,7 @@ import Product from '../models/Product.js';
 export const createOrder = async (req, res) => {
     const { items, payment, subtotal, tax, total, discount } = req.body;
 
-    if (!items || items.length === 0) {
+    if (!Array.isArray(items) || items.length === 0) {
         return res.status(400).json({ message: 'No order items' });
     }
 
@@ -16,48 +19,99 @@ export const createOrder = async (req, res) => {
         return res.status(400).json({ message: 'Payment method and amount paid are required' });
     }
 
+    const normalizedItems = items.map((item) => ({
+        ...item,
+        qty: Number(item.qty),
+        price: Number(item.price),
+        total: Number(item.total),
+    }));
+
+    for (const item of normalizedItems) {
+        if (!isValidObjectId(item.product)) {
+            return res.status(400).json({ message: `Invalid product id for ${item.name || 'item'}` });
+        }
+
+        if (!Number.isFinite(item.qty) || item.qty <= 0) {
+            return res.status(400).json({ message: `Invalid quantity for ${item.name || 'item'}` });
+        }
+
+        if (!Number.isFinite(item.price) || item.price < 0) {
+            return res.status(400).json({ message: `Invalid price for ${item.name || 'item'}` });
+        }
+    }
+
     try {
-        // 1. Generate human-friendly order number
-        const date = new Date();
-        const orderCount = await Order.countDocuments();
-        const orderNo = `ORD-${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}-${(orderCount + 1).toString().padStart(4, '0')}`;
+        let createdOrder;
+        const reservedItems = [];
 
-        // 2. Validate stock and items
-        for (const item of items) {
-            const product = await Product.findById(item.product);
-            if (!product) {
-                return res.status(404).json({ message: `Product ${item.name} not found` });
+        try {
+            // 1. Generate human-friendly order number
+            const date = new Date();
+            const orderNo = `ORD-${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}-${date.getTime().toString().slice(-6)}`;
+
+            // 2. Reserve inventory with conditional atomic decrements
+            for (const item of normalizedItems) {
+                const updatedProduct = await Product.findOneAndUpdate(
+                    {
+                        _id: item.product,
+                        stockQty: { $gte: item.qty },
+                        isAvailable: true,
+                    },
+                    { $inc: { stockQty: -item.qty } },
+                    { new: true }
+                );
+
+                if (!updatedProduct) {
+                    const product = await Product.findById(item.product);
+
+                    if (!product) {
+                        throw new Error(`Product ${item.name || 'item'} not found`);
+                    }
+
+                    if (!product.isAvailable) {
+                        throw new Error(`${item.name || product.name} is unavailable`);
+                    }
+
+                    throw new Error(`Insufficient stock for ${item.name || product.name}`);
+                }
+
+                reservedItems.push({ product: item.product, qty: item.qty });
             }
-            if (product.stockQty < item.qty) {
-                return res.status(400).json({ message: `Insufficient stock for ${item.name}` });
-            }
-        }
 
-        // 3. Create order
-        const order = new Order({
-            orderNo,
-            cashier: req.user._id,
-            cashierName: req.user.name,
-            items,
-            subtotal,
-            tax,
-            total,
-            discount,
-            payment,
-        });
-
-        const createdOrder = await order.save();
-
-        // 4. Update stock
-        for (const item of items) {
-            await Product.findByIdAndUpdate(item.product, {
-                $inc: { stockQty: -item.qty },
+            // 3. Create order
+            const order = new Order({
+                orderNo,
+                cashier: req.user._id,
+                cashierName: req.user.name,
+                items: normalizedItems,
+                subtotal: Number(subtotal) || 0,
+                tax: Number(tax) || 0,
+                total: Number(total) || 0,
+                discount: Number(discount) || 0,
+                payment: {
+                    method: payment.method,
+                    amountPaid: Number(payment.amountPaid) || 0,
+                    change: Number(payment.change) || 0,
+                },
             });
-        }
 
-        res.status(201).json(createdOrder);
+            createdOrder = await order.save();
+            return res.status(201).json(createdOrder);
+        } catch (error) {
+            if (reservedItems.length > 0) {
+                await Promise.all(
+                    reservedItems.map((item) =>
+                        Product.findByIdAndUpdate(item.product, {
+                            $inc: { stockQty: item.qty },
+                        })
+                    )
+                );
+            }
+
+            throw error;
+        }
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        return res.status(400).json({ message: error.message });
     }
 };
 
@@ -66,6 +120,10 @@ export const createOrder = async (req, res) => {
 // @access  Private
 export const getOrderById = async (req, res) => {
     try {
+        if (!isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: 'Invalid order id' });
+        }
+
         const order = await Order.findById(req.params.id).populate('cashier', 'name email');
 
         if (order) {
@@ -83,6 +141,10 @@ export const getOrderById = async (req, res) => {
 // @access  Private
 export const getOrderReceipt = async (req, res) => {
     try {
+        if (!isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: 'Invalid order id' });
+        }
+
         const order = await Order.findById(req.params.id).populate('cashier', 'name email');
 
         if (!order) {
@@ -113,6 +175,11 @@ export const getOrders = async (req, res) => {
 export const getDailyReport = async (req, res) => {
     try {
         const date = req.query.date ? new Date(req.query.date) : new Date();
+
+        if (Number.isNaN(date.getTime())) {
+            return res.status(400).json({ message: 'Invalid date parameter' });
+        }
+
         const start = new Date(date.setHours(0, 0, 0, 0));
         const end = new Date(date.setHours(23, 59, 59, 999));
 

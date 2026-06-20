@@ -16,6 +16,7 @@ export default function Products() {
     const [isLoading, setIsLoading] = useState(true);
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [feedback, setFeedback] = useState('');
 
     const fetchProducts = async () => {
         try {
@@ -39,13 +40,12 @@ export default function Products() {
     );
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this product?')) {
-            try {
-                await productApi.delete(id);
-                fetchProducts();
-            } catch (error) {
-                alert('Failed to delete product');
-            }
+        try {
+            await productApi.delete(id);
+            setFeedback('Product deleted successfully.');
+            fetchProducts();
+        } catch (error) {
+            setFeedback(error.response?.data?.message || 'Failed to delete product');
         }
     };
 
@@ -53,6 +53,11 @@ export default function Products() {
 
     return (
         <div className="p-6 space-y-6">
+            {feedback && (
+                <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-700 shadow-sm">
+                    {feedback}
+                </div>
+            )}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-dark">Products</h1>

@@ -16,6 +16,7 @@ export default function Categories() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
     const [formData, setFormData] = useState({ name: '', description: '' });
+    const [banner, setBanner] = useState('');
 
     const fetchCategories = async () => {
         try {
@@ -43,26 +44,26 @@ export default function Categories() {
         e.preventDefault();
         try {
             if (currentCategory) {
-                // Update not implemented in categoryApi yet, but I can add it if needed
-                alert('Update category not yet implemented');
+                await categoryApi.update(currentCategory._id, formData);
+                setBanner('Category updated successfully.');
             } else {
                 await categoryApi.create(formData);
-                fetchCategories();
+                setBanner('Category created successfully.');
             }
+            fetchCategories();
             setIsModalOpen(false);
         } catch (error) {
-            alert(error.response?.data?.message || 'Failed to save category');
+            setBanner(error.response?.data?.message || 'Failed to save category');
         }
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Delete this category?')) {
-            try {
-                await categoryApi.delete(id);
-                fetchCategories();
-            } catch (error) {
-                alert('Failed to delete category');
-            }
+        try {
+            await categoryApi.delete(id);
+            setBanner('Category deleted.');
+            fetchCategories();
+        } catch (error) {
+            setBanner(error.response?.data?.message || 'Failed to delete category');
         }
     };
 
@@ -70,6 +71,11 @@ export default function Categories() {
 
     return (
         <div className="space-y-6">
+            {banner && (
+                <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-700 shadow-sm">
+                    {banner}
+                </div>
+            )}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Catalog</p>
@@ -93,7 +99,7 @@ export default function Categories() {
                     ) : categories.map((cat) => (
                         <TableRow key={cat._id}>
                             <TableCell className="font-bold text-dark">{cat.name}</TableCell>
-                            <TableCell className="text-gray-500 max-w-xs truncate">{cat.description || '-'}</TableCell>
+                            <TableCell className="text-slate-500 max-w-xs truncate">{cat.description || '-'}</TableCell>
                             <TableCell>
                                 <div className="flex items-center gap-2">
                                     <button

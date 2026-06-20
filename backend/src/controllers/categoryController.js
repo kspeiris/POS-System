@@ -1,5 +1,8 @@
 
+import mongoose from 'mongoose';
 import Category from '../models/Category.js';
+
+const isValidObjectId = (value) => mongoose.Types.ObjectId.isValid(value);
 
 // @desc    Get all categories
 // @route   GET /api/categories
@@ -44,6 +47,10 @@ export const createCategory = async (req, res) => {
 // @access  Private/Admin
 export const updateCategory = async (req, res) => {
     try {
+        if (!isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: 'Invalid category id' });
+        }
+
         const category = await Category.findById(req.params.id);
 
         if (!category) {
@@ -82,6 +89,10 @@ export const updateCategory = async (req, res) => {
 // @access  Private/Admin
 export const deleteCategory = async (req, res) => {
     try {
+        if (!isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: 'Invalid category id' });
+        }
+
         const category = await Category.findById(req.params.id);
         if (category) {
             await category.deleteOne();
