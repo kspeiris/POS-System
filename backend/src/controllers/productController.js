@@ -36,10 +36,17 @@ export const createProduct = async (req, res) => {
     try {
         const { name, price, category, stockQty, description, imageUrl } = req.body;
 
+        const categoryName = typeof category === 'string' ? category.trim() : '';
+        const normalizedName = typeof name === 'string' ? name.trim() : '';
+
+        if (!normalizedName || !categoryName) {
+            return res.status(400).json({ message: 'Name and category are required' });
+        }
+
         const product = new Product({
-            name,
+            name: normalizedName,
             price,
-            category,
+            category: categoryName,
             stockQty,
             description,
             imageUrl,
@@ -62,12 +69,12 @@ export const updateProduct = async (req, res) => {
         const product = await Product.findById(req.params.id);
 
         if (product) {
-            product.name = name || product.name;
-            product.price = price || product.price;
-            product.category = category || product.category;
+            product.name = name?.trim() || product.name;
+            product.price = price ?? product.price;
+            product.category = category?.trim() || product.category;
             product.stockQty = stockQty ?? product.stockQty;
-            product.description = description || product.description;
-            product.imageUrl = imageUrl || product.imageUrl;
+            product.description = description ?? product.description;
+            product.imageUrl = imageUrl ?? product.imageUrl;
             product.isAvailable = isAvailable ?? product.isAvailable;
 
             const updatedProduct = await product.save();

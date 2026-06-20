@@ -20,15 +20,19 @@ export const createUser = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
 
-        const userExists = await User.findOne({ email });
+        if (!name || !email || !password) {
+            return res.status(400).json({ message: 'Name, email, and password are required' });
+        }
+
+        const userExists = await User.findOne({ email: email.toLowerCase() });
 
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
         const user = await User.create({
-            name,
-            email,
+            name: name.trim(),
+            email: email.toLowerCase().trim(),
             password,
             role,
         });
@@ -58,7 +62,7 @@ export const updateUserStatus = async (req, res) => {
         if (user) {
             user.isActive = req.body.isActive ?? user.isActive;
             user.role = req.body.role || user.role;
-            user.name = req.body.name || user.name;
+            user.name = req.body.name?.trim() || user.name;
 
             if (req.body.password) {
                 user.password = req.body.password;

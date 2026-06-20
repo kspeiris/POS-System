@@ -12,6 +12,10 @@ export const createOrder = async (req, res) => {
         return res.status(400).json({ message: 'No order items' });
     }
 
+    if (!payment?.method || payment.amountPaid === undefined) {
+        return res.status(400).json({ message: 'Payment method and amount paid are required' });
+    }
+
     try {
         // 1. Generate human-friendly order number
         const date = new Date();
@@ -69,6 +73,23 @@ export const getOrderById = async (req, res) => {
         } else {
             res.status(404).json({ message: 'Order not found' });
         }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Get receipt data by order ID
+// @route   GET /api/orders/:id/receipt
+// @access  Private
+export const getOrderReceipt = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id).populate('cashier', 'name email');
+
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        res.json(order);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

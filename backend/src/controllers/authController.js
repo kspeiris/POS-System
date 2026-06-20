@@ -9,7 +9,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const user = await User.findOne({ email }).select('+password');
+        const user = await User.findOne({ email: email?.toLowerCase().trim() }).select('+password');
 
         if (user && (await user.matchPassword(password))) {
             if (!user.isActive) {
