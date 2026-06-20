@@ -20,11 +20,13 @@ import ProductForm from './pages/admin/ProductForm';
 import Categories from './pages/admin/Categories';
 import Users from './pages/admin/Users';
 import ReportsDaily from './pages/admin/ReportsDaily';
+import AnalysisAdmin from './pages/admin/Analysis';
 import Settings from './pages/admin/Settings';
 
 // Cashier Pages
 import POS from './pages/cashier/POS';
 import Orders from './pages/cashier/Orders';
+import AnalysisCashier from './pages/cashier/Analysis';
 import OrderDetails from './pages/cashier/OrderDetails';
 import Receipt from './pages/cashier/Receipt';
 
@@ -54,6 +56,7 @@ function App() {
                 <Route path="categories" element={<Categories />} />
                 <Route path="users" element={<Users />} />
                 <Route path="reports/daily" element={<ReportsDaily />} />
+                <Route path="analysis" element={<AnalysisAdmin />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
             </Route>
@@ -63,6 +66,7 @@ function App() {
               <Route element={<CashierLayout />}>
                 <Route path="/pos" element={<POS />} />
                 <Route path="/orders" element={<Orders />} />
+                <Route path="/analysis" element={<AnalysisCashier />} />
                 <Route path="/orders/:id" element={<OrderDetails />} />
                 <Route path="/profile" element={<Profile />} />
               </Route>

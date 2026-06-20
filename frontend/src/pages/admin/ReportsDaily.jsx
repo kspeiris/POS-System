@@ -42,6 +42,9 @@ export default function ReportsDaily() {
 
     if (isLoading) return <Loader fullPage />;
 
+    const salesByCategory = reportData?.salesByCategory || [];
+    const recentOrders = reportData?.recentOrders || [];
+
     return (
         <div className="space-y-6">
             {error && (
@@ -89,7 +92,7 @@ export default function ReportsDaily() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card title="Sales by Category" className="lg:col-span-1">
                     <div className="space-y-4">
-                        {(reportData.salesByCategory || []).map((item, idx) => (
+                        {salesByCategory.map((item, idx) => (
                             <div key={idx} className="space-y-1">
                                 <div className="flex justify-between text-sm">
                                     <span className="font-medium text-dark">{item.category}</span>
@@ -103,7 +106,7 @@ export default function ReportsDaily() {
                                 </div>
                             </div>
                         ))}
-                        {(reportData.salesByCategory || []).length === 0 && (
+                        {salesByCategory.length === 0 && (
                             <p className="text-sm text-slate-500 text-center py-4">No data available</p>
                         )}
                     </div>
@@ -111,7 +114,7 @@ export default function ReportsDaily() {
 
                 <Card title="Recent Transactions" className="lg:col-span-2" noPadding>
                     <Table headers={['Time', 'Order ID', 'Items', 'Total', 'Payment']}>
-                        {(reportData.recentOrders || []).map((tx) => (
+                        {recentOrders.map((tx) => (
                             <TableRow key={tx._id}>
                                 <TableCell className="text-slate-500">{dayjs(tx.createdAt).format('HH:mm')}</TableCell>
                                 <TableCell className="font-bold text-primary">{tx.orderNo}</TableCell>
@@ -123,7 +126,7 @@ export default function ReportsDaily() {
                             </TableRow>
                         ))}
                     </Table>
-                    {(reportData.recentOrders || []).length === 0 && (
+                    {recentOrders.length === 0 && (
                         <p className="text-sm text-slate-500 text-center py-10">No transactions today</p>
                     )}
                 </Card>

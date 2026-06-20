@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { LogOut, History, Home, User } from 'lucide-react';
+import { LogOut, History, Home, User, LineChart } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Navbar() {
@@ -20,6 +20,10 @@ export default function Navbar() {
                 <Link to="/pos" className="hidden sm:flex items-center gap-2 text-slate-600 hover:text-primary font-semibold px-3 py-2 rounded-xl hover:bg-slate-100/80 transition-colors">
                     <Home className="w-5 h-5" />
                     POS
+                </Link>
+                <Link to="/analysis" className="hidden sm:flex items-center gap-2 text-slate-600 hover:text-primary font-semibold px-3 py-2 rounded-xl hover:bg-slate-100/80 transition-colors">
+                    <LineChart className="w-5 h-5" />
+                    Analysis
                 </Link>
                 <Link to="/orders" className="hidden sm:flex items-center gap-2 text-slate-600 hover:text-primary font-semibold px-3 py-2 rounded-xl hover:bg-slate-100/80 transition-colors">
                     <History className="w-5 h-5" />
