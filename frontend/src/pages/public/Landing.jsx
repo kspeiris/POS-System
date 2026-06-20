@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingBag, ShieldCheck, BarChart3, Clock, ArrowRight, Star } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, BarChart3, Clock, ArrowRight, Star, House } from 'lucide-react';
 import Button from '../../components/ui/Button';
 
 export default function Landing() {
@@ -20,7 +20,7 @@ export default function Landing() {
                                 Run your <span className="text-primary">Restaurant</span> Smarter & Faster.
                             </h1>
                             <p className="text-xl text-slate-500 max-w-lg leading-relaxed">
-                                QuickPOS Lite keeps billing, staff, and inventory inside one responsive browser experience built for the counter and the office.
+                                QuickPOS Lite keeps billing, staff, and inventory inside one responsive browser experience built for Sri Lanka.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                 <Link to="/login">
@@ -29,11 +29,11 @@ export default function Landing() {
                                         <ArrowRight size={20} className="ml-2" />
                                     </Button>
                                 </Link>
-                                <Link to="#features">
+                                <a href="#features">
                                     <Button variant="secondary" size="lg" className="w-full sm:w-auto px-8 py-4 rounded-xl text-lg">
                                         See Features
                                     </Button>
-                                </Link>
+                                </a>
                             </div>
                         </div>
 
@@ -108,6 +108,12 @@ export default function Landing() {
                                 <Button size="lg" className="bg-white text-dark hover:bg-slate-100 px-10 py-5 rounded-2xl text-xl font-black shadow-2xl">
                                     Start Billing Now
                                 </Button>
+                            </Link>
+                        </div>
+                        <div className="pt-2">
+                            <Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-white/80 hover:text-white transition-colors">
+                                <House size={16} />
+                                Back to landing
                             </Link>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ import Card from '../../components/ui/Card';
 import Loader from '../../components/ui/Loader';
 import { orderApi } from '../../api/orderApi';
 import dayjs from 'dayjs';
+import { formatLKR } from '../../utils/money';
 
 export default function AnalysisCashier() {
     const [isLoading, setIsLoading] = useState(true);
@@ -107,9 +108,9 @@ export default function AnalysisCashier() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
-                    { label: 'Today Revenue', value: `$${todayRevenue.toFixed(2)}`, icon: DollarSign, color: 'text-primary bg-primary/10' },
+                    { label: 'Today Revenue', value: formatLKR(todayRevenue), icon: DollarSign, color: 'text-primary bg-primary/10' },
                     { label: 'Orders in Range', value: filteredOrders.length.toString(), icon: ShoppingBag, color: 'text-blue-600 bg-blue-50' },
-                    { label: 'Avg Ticket', value: `$${avgTicket.toFixed(2)}`, icon: TrendingUp, color: 'text-emerald-600 bg-emerald-50' },
+                    { label: 'Avg Ticket', value: formatLKR(avgTicket), icon: TrendingUp, color: 'text-emerald-600 bg-emerald-50' },
                 ].map((item) => (
                     <Card key={item.label}>
                         <div className="flex items-center justify-between">
@@ -154,7 +155,7 @@ export default function AnalysisCashier() {
                         </div>
                         <div className="text-right">
                             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Value</p>
-                            <p className="mt-2 text-lg font-bold text-dark">${topPayment.total.toFixed(2)}</p>
+                            <p className="mt-2 text-lg font-bold text-dark">{formatLKR(topPayment.total)}</p>
                         </div>
                     </div>
                 </Card>
@@ -171,7 +172,7 @@ export default function AnalysisCashier() {
                                     {dayjs(order.createdAt).format('HH:mm')}
                                 </p>
                             </div>
-                            <p className="font-semibold text-dark">${Number(order.total || 0).toFixed(2)}</p>
+                            <p className="font-semibold text-dark">{formatLKR(order.total)}</p>
                         </div>
                     ))}
                     {filteredOrders.length === 0 && <p className="text-sm text-slate-500 text-center py-4">No orders found for this range.</p>}

@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Box, Grid, Users, FileText, Settings, LogOut, User, LineChart } from 'lucide-react';
+import { Home, Box, Grid, Users, FileText, Settings, LogOut, User, LineChart, House } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import clsx from 'clsx';
 
@@ -10,6 +10,7 @@ export default function Sidebar() {
     const isActive = (path) => location.pathname === path;
 
     const navItems = [
+        { icon: House, label: 'Landing Page', path: '/' },
         { icon: Home, label: 'Dashboard', path: '/admin' },
         { icon: Box, label: 'Products', path: '/admin/products' },
         { icon: Grid, label: 'Categories', path: '/admin/categories' },

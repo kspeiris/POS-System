@@ -1,5 +1,6 @@
 
 import { Plus } from 'lucide-react';
+import { formatLKR } from '../../utils/money';
 
 export default function ProductGrid({ products, onAddToCart }) {
     if (!products || products.length === 0) {
@@ -33,7 +34,7 @@ export default function ProductGrid({ products, onAddToCart }) {
                     </div>
 
                     <div className="flex items-center justify-between mt-auto">
-                        <span className="font-bold text-primary text-lg">${product.price.toFixed(2)}</span>
+                        <span className="font-bold text-primary text-lg">{formatLKR(product.price)}</span>
                         <button
                             onClick={() => onAddToCart(product)}
                             className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors"

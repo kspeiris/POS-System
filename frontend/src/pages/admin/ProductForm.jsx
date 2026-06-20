@@ -6,6 +6,7 @@ import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Loader from '../../components/ui/Loader';
+import { formatLKR } from '../../utils/money';
 
 import { productApi } from '../../api/productApi';
 import { categoryApi } from '../../api/categoryApi';
@@ -19,6 +20,7 @@ export default function ProductForm() {
     const [isSaving, setIsSaving] = useState(false);
     const [categories, setCategories] = useState([]);
     const [feedback, setFeedback] = useState('');
+    const [imagePreview, setImagePreview] = useState('');
 
     const [formData, setFormData] = useState({
         name: '',
@@ -47,6 +49,7 @@ export default function ProductForm() {
                         imageUrl: prodData.imageUrl || '',
                         isAvailable: prodData.isAvailable,
                     });
+                    setImagePreview(prodData.imageUrl || '');
                 } else if (catData.length > 0) {
                     setFormData(prev => ({ ...prev, category: catData[0].name }));
                 }
@@ -65,6 +68,17 @@ export default function ProductForm() {
             ...prev,
             [name]: type === 'checkbox' ? checked : value
         }));
+    };
+
+    const handleImageFile = (file) => {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            const result = String(reader.result || '');
+            setImagePreview(result);
+            setFormData((prev) => ({ ...prev, imageUrl: result }));
+        };
+        reader.readAsDataURL(file);
     };
 
     const handleSubmit = async (e) => {
@@ -119,11 +133,23 @@ export default function ProductForm() {
                 <div className="md:col-span-1 space-y-6">
                     <Card title="Product Image" subtitle="Use a clean image that is easy to scan">
                         <div className="flex flex-col items-center gap-4">
-                            <div className="w-full aspect-square rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 group hover:border-primary hover:bg-primary/5 transition-all cursor-pointer">
-                                <Upload size={32} className="mb-2 group-hover:text-primary transition-colors" />
-                                <span className="text-xs font-medium group-hover:text-primary transition-colors">Click to Upload</span>
-                                <span className="text-[10px]">PNG, JPG up to 5MB</span>
-                            </div>
+                            <label className="w-full aspect-square rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 group hover:border-primary hover:bg-primary/5 transition-all cursor-pointer overflow-hidden relative">
+                                {imagePreview ? (
+                                    <img src={imagePreview} alt="Product preview" className="absolute inset-0 h-full w-full object-cover" />
+                                ) : (
+                                    <>
+                                        <Upload size={32} className="mb-2 group-hover:text-primary transition-colors" />
+                                        <span className="text-xs font-medium group-hover:text-primary transition-colors">Click to Upload</span>
+                                        <span className="text-[10px]">PNG, JPG up to 5MB</span>
+                                    </>
+                                )}
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={(e) => handleImageFile(e.target.files?.[0])}
+                                />
+                            </label>
                             <p className="text-xs text-center text-gray-500">
                                 Recommend style: Clear image with simple background.
                             </p>
@@ -182,6 +208,9 @@ export default function ProductForm() {
                                 placeholder="0.00"
                                 required
                             />
+                            <div className="md:col-span-2 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+                                Price preview: <span className="font-semibold text-dark">{formatLKR(formData.price || 0)}</span>
+                            </div>
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-sm font-medium text-gray-700">Category</label>
                                 <select

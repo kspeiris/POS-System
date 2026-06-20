@@ -5,6 +5,7 @@ import Loader from '../../components/ui/Loader';
 import { orderApi } from '../../api/orderApi';
 import { userApi } from '../../api/userApi';
 import dayjs from 'dayjs';
+import { formatLKR } from '../../utils/money';
 
 export default function AnalysisAdmin() {
     const [isLoading, setIsLoading] = useState(true);
@@ -104,9 +105,9 @@ export default function AnalysisAdmin() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                 {[
-                    { label: 'Revenue', value: `$${filteredOrders.reduce((sum, order) => sum + (order.total || 0), 0).toFixed(2)}`, icon: DollarSign, color: 'text-primary bg-primary/10' },
+                    { label: 'Revenue', value: formatLKR(filteredOrders.reduce((sum, order) => sum + (order.total || 0), 0)), icon: DollarSign, color: 'text-primary bg-primary/10' },
                     { label: 'Orders', value: filteredOrders.length.toString(), icon: ShoppingBag, color: 'text-blue-600 bg-blue-50' },
-                    { label: 'Average Ticket', value: `$${avgOrder.toFixed(2)}`, icon: TrendingUp, color: 'text-emerald-600 bg-emerald-50' },
+                    { label: 'Average Ticket', value: formatLKR(avgOrder), icon: TrendingUp, color: 'text-emerald-600 bg-emerald-50' },
                     { label: 'Staff Members', value: staff.length.toString(), icon: Users, color: 'text-violet-600 bg-violet-50' },
                 ].map((item) => (
                     <Card key={item.label}>
@@ -185,7 +186,7 @@ export default function AnalysisAdmin() {
                                     <p className="text-xs text-slate-500">{dayjs(order.createdAt).format('MMM D, HH:mm')}</p>
                                 </div>
                                 <div className="text-right">
-                                    <p className="font-semibold text-dark">${Number(order.total || 0).toFixed(2)}</p>
+                            <p className="font-semibold text-dark">{formatLKR(order.total)}</p>
                                     <p className="text-xs text-slate-500 capitalize">{order.status}</p>
                                 </div>
                             </div>
@@ -198,7 +199,7 @@ export default function AnalysisAdmin() {
                     <div className="space-y-4">
                         <div className="rounded-2xl bg-primary/5 p-4">
                             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Revenue</p>
-                            <p className="mt-2 text-sm text-slate-600">Average order value is ${avgOrder.toFixed(2)} across {filteredOrders.length} orders.</p>
+                            <p className="mt-2 text-sm text-slate-600">Average order value is {formatLKR(avgOrder)} across {filteredOrders.length} orders.</p>
                         </div>
                         <div className="rounded-2xl bg-slate-50 p-4">
                             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Timing</p>

@@ -6,6 +6,7 @@ import Button from '../../components/ui/Button';
 import Badge from '../../components/ui/Badge';
 import Table, { TableRow, TableCell } from '../../components/ui/Table';
 import dayjs from 'dayjs';
+import { formatLKR } from '../../utils/money';
 
 import { useState, useEffect } from 'react';
 import { orderApi } from '../../api/orderApi';
@@ -67,23 +68,23 @@ export default function OrderDetails() {
                         <div className="space-y-4">
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-500">Subtotal</span>
-                                <span className="font-medium text-dark">${order.subtotal.toFixed(2)}</span>
+                                <span className="font-medium text-dark">{formatLKR(order.subtotal)}</span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-500">Tax (10%)</span>
-                                <span className="font-medium text-dark">${order.tax.toFixed(2)}</span>
+                                <span className="font-medium text-dark">{formatLKR(order.tax)}</span>
                             </div>
                             <div className="flex justify-between items-center pt-4 border-t border-dashed border-gray-200">
                                 <span className="text-lg font-bold text-dark">Total</span>
-                                <span className="text-xl font-bold text-primary">${order.total.toFixed(2)}</span>
+                                <span className="text-xl font-bold text-primary">{formatLKR(order.total)}</span>
                             </div>
                             <div className="flex justify-between items-center pt-4 text-sm">
                                 <span className="text-gray-500">Amount Paid ({order.payment.method})</span>
-                                <span className="font-medium text-dark">${order.payment.amountPaid.toFixed(2)}</span>
+                                <span className="font-medium text-dark">{formatLKR(order.payment.amountPaid)}</span>
                             </div>
                             <div className="flex justify-between items-center text-sm">
                                 <span className="text-gray-500">Change</span>
-                                <span className="font-medium text-success">${order.payment.change.toFixed(2)}</span>
+                                <span className="font-medium text-success">{formatLKR(order.payment.change)}</span>
                             </div>
                         </div>
                     </Card>
@@ -124,9 +125,9 @@ export default function OrderDetails() {
                     </Card>
 
                     <div className="space-y-3">
-                        <Button className="w-full flex items-center justify-center gap-2" size="lg">
+                        <Button className="w-full flex items-center justify-center gap-2" size="lg" onClick={() => window.print()}>
                             <Printer size={18} />
-                            Print Receipt
+                            Print / Save PDF
                         </Button>
                         <Button variant="secondary" className="w-full flex items-center justify-center gap-2" size="lg">
                             <Download size={18} />

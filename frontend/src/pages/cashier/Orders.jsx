@@ -9,6 +9,7 @@ import Input from '../../components/ui/Input';
 import Badge from '../../components/ui/Badge';
 import Loader from '../../components/ui/Loader';
 import dayjs from 'dayjs';
+import { formatLKR } from '../../utils/money';
 
 import { orderApi } from '../../api/orderApi';
 
@@ -78,7 +79,7 @@ export default function Orders() {
                             <TableCell className="font-bold text-primary">{order.orderNo}</TableCell>
                             <TableCell>{dayjs(order.createdAt).format('MMM D, YYYY HH:mm')}</TableCell>
                             <TableCell>{order.items.length} items</TableCell>
-                            <TableCell className="font-bold">${order.total.toFixed(2)}</TableCell>
+                            <TableCell className="font-bold">{formatLKR(order.total)}</TableCell>
                             <TableCell>
                                 <Badge variant={
                                     order.status === 'completed' ? 'success' :
