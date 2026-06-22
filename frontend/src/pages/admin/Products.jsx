@@ -54,14 +54,14 @@ export default function Products() {
     return (
         <div className="p-6 space-y-6">
             {feedback && (
-                <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-700 shadow-sm">
+                <div className="rounded-2xl border border-border bg-white/80 px-4 py-3 text-sm text-dark-2 shadow-card">
                     {feedback}
                 </div>
             )}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-dark">Products</h1>
-                    <p className="text-gray-500 text-sm">Manage your restaurant menu items</p>
+                    <p className="text-gray text-sm">Manage your restaurant menu items</p>
                 </div>
                 <Button
                     className="flex items-center gap-2"
@@ -73,7 +73,7 @@ export default function Products() {
             </div>
 
             <Card className="flex flex-col">
-                <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div className="p-4 border-b border-border flex flex-col md:flex-row gap-4 items-center justify-between">
                     <div className="relative w-full md:w-96">
                         <Input
                             placeholder="Search products..."
@@ -82,7 +82,7 @@ export default function Products() {
                             icon={Search}
                         />
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <div className="flex items-center gap-2 text-sm text-gray">
                         <Filter size={16} />
                         <span>Filter by Category:</span>
                         <select className="bg-transparent border-none focus:ring-0 font-medium text-dark">
@@ -99,7 +99,7 @@ export default function Products() {
                         <TableRow key={product._id}>
                             <TableCell>
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center font-bold text-gray-400 overflow-hidden">
+                                    <div className="w-10 h-10 rounded-lg bg-light flex items-center justify-center font-bold text-gray overflow-hidden">
                                         {product.imageUrl ? (
                                             <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
                                         ) : product.name.charAt(0)}
@@ -119,13 +119,13 @@ export default function Products() {
                                 <div className="flex items-center gap-2">
                                     <button
                                         onClick={() => navigate(`/admin/products/${product._id}/edit`)}
-                                        className="p-2 text-gray-400 hover:text-primary transition-colors"
+                                        className="p-2 text-gray hover:text-primary transition-colors"
                                     >
                                         <Edit2 size={18} />
                                     </button>
                                     <button
                                         onClick={() => handleDelete(product._id)}
-                                        className="p-2 text-gray-400 hover:text-danger transition-colors"
+                                        className="p-2 text-gray hover:text-danger transition-colors"
                                     >
                                         <Trash2 size={18} />
                                     </button>
