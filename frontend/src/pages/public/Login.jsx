@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import clsx from 'clsx';
@@ -17,12 +17,10 @@ const loginSchema = z.object({
 export default function Login() {
     const { login } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
-    const [showPassword, setShowPassword] = useState(false);
+        const [showPassword, setShowPassword] = useState(false);
     const [serverError, setServerError] = useState('');
 
-    const from = location.state?.from?.pathname || '/';
-
+    
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(loginSchema),
     });

@@ -1,25 +1,15 @@
-
-import { createContext, useContext, useState, useEffect } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useState } from 'react';
 
 const CartContext = createContext(null);
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
-    const [subtotal, setSubtotal] = useState(0);
-    const [tax, setTax] = useState(0);
-    const [total, setTotal] = useState(0);
     const TAX_RATE = 0.10; // 10% tax for mockup
 
-    // Calculate totals whenever cart changes
-    useEffect(() => {
-        const newSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const newTax = newSubtotal * TAX_RATE;
-        const newTotal = newSubtotal + newTax;
-
-        setSubtotal(newSubtotal);
-        setTax(newTax);
-        setTotal(newTotal);
-    }, [cart]);
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const tax = subtotal * TAX_RATE;
+    const total = subtotal + tax;
 
     const addToCart = (product) => {
         setCart(prevCart => {
