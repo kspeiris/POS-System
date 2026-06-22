@@ -7,7 +7,7 @@ export default function Unauthorized() {
             <div className="max-w-md glass rounded-[2rem] p-8">
                 <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Access denied</p>
                 <h1 className="text-3xl font-bold text-dark mt-2 mb-4">Unauthorized Access</h1>
-                <p className="mb-6 text-slate-500">You do not have permission to view this page.</p>
+                <p className="mb-6 text-gray">You do not have permission to view this page.</p>
                 <Link to="/" className="inline-flex px-5 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary-hover transition-colors">
                     Go Home
                 </Link>
