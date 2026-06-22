@@ -10,19 +10,19 @@ export default function Input({
     return (
         <div className="flex flex-col gap-1.5 w-full">
             {label && (
-                <label className="text-sm font-medium text-slate-700">
+                <label className="text-xs font-medium text-gray uppercase tracking-[0.08em]">
                     {label}
                 </label>
             )}
             <div className="relative">
                 {Icon && (
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray">
                         <Icon size={18} />
                     </div>
                 )}
                 <input
                     className={twMerge(
-                        'w-full rounded-xl border border-slate-200 bg-white/90 py-2.5 px-3.5 text-sm shadow-sm transition-all focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:cursor-not-allowed disabled:opacity-50',
+                        'w-full rounded-xl border-border bg-white py-2.5 px-3.5 text-sm shadow-sm transition-all focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:cursor-not-allowed disabled:opacity-50',
                         Icon && 'pl-10',
                         error && 'border-danger focus:ring-danger/20 focus:border-danger',
                         className
@@ -31,7 +31,7 @@ export default function Input({
                 />
             </div>
             {error && (
-                <span className="text-xs text-red-600 font-medium">
+                <span className="text-xs text-danger font-medium">
                     {error}
                 </span>
             )}

@@ -24,7 +24,7 @@ export default function Profile() {
                     <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Account</p>
                     <h1 className="text-3xl font-bold text-dark mt-1">My Profile</h1>
                 </div>
-                <Button variant="ghost" className="text-red-500 hover:bg-red-50" onClick={logout}>
+                <Button variant="ghost" className="text-danger hover:bg-light-red" onClick={logout}>
                     <LogOut size={18} className="mr-2" />
                     Sign Out
                 </Button>
@@ -34,15 +34,15 @@ export default function Profile() {
                 <div className="md:col-span-1">
                     <Card className="text-center">
                         <div className="relative inline-block mb-4">
-                            <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary border-4 border-white shadow-lg overflow-hidden">
+                            <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary border-4 border-white shadow-card overflow-hidden">
                                 <User size={48} />
                             </div>
-                            <button type="button" className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-md border border-gray-100 text-gray-400 hover:text-primary transition-all">
+                            <button type="button" className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-card border border-border text-gray hover:text-primary transition-all">
                                 <Camera size={16} />
                             </button>
                         </div>
                         <h2 className="text-xl font-bold text-dark">{user?.name}</h2>
-                        <p className="text-sm text-gray-500 mb-4">{user?.email}</p>
+                        <p className="text-sm text-gray mb-4">{user?.email}</p>
                         <Badge variant={user?.role === 'admin' ? 'primary' : 'neutral'}>
                             {user?.role}
                         </Badge>
@@ -81,14 +81,14 @@ export default function Profile() {
 
                     <Card title="Security" subtitle="Manage your password and authentication">
                         <div className="space-y-4">
-                            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                            <div className="flex items-center justify-between p-4 bg-light rounded-2xl border border-border">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white rounded-xl text-slate-400">
+                                    <div className="p-2 bg-white rounded-xl text-gray">
                                         <Key size={20} />
                                     </div>
                                     <div>
                                         <p className="font-bold text-dark text-sm">Change Password</p>
-                                        <p className="text-xs text-gray-500">Last changed 3 months ago</p>
+                                        <p className="text-xs text-gray">Last changed 3 months ago</p>
                                     </div>
                                 </div>
                                 <Button variant="secondary" size="sm" type="button" onClick={() => setIsPasswordOpen(true)}>Update</Button>

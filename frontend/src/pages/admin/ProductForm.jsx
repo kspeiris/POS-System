@@ -109,7 +109,7 @@ export default function ProductForm() {
     return (
         <div className="max-w-4xl mx-auto space-y-6">
             {feedback && (
-                <div className="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <div className="rounded-2xl border border-light-red bg-light-red px-4 py-3 text-sm text-danger">
                     {feedback}
                 </div>
             )}
@@ -133,7 +133,7 @@ export default function ProductForm() {
                 <div className="md:col-span-1 space-y-6">
                     <Card title="Product Image" subtitle="Use a clean image that is easy to scan">
                         <div className="flex flex-col items-center gap-4">
-                            <label className="w-full aspect-square rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 group hover:border-primary hover:bg-primary/5 transition-all cursor-pointer overflow-hidden relative">
+                            <label className="w-full aspect-square rounded-3xl bg-light border-2 border-dashed border-border flex flex-col items-center justify-center text-gray group hover:border-primary hover:bg-primary/5 transition-all cursor-pointer overflow-hidden relative">
                                 {imagePreview ? (
                                     <img src={imagePreview} alt="Product preview" className="absolute inset-0 h-full w-full object-cover" />
                                 ) : (
@@ -150,7 +150,7 @@ export default function ProductForm() {
                                     onChange={(e) => handleImageFile(e.target.files?.[0])}
                                 />
                             </label>
-                            <p className="text-xs text-center text-gray-500">
+                            <p className="text-xs text-center text-gray">
                                 Recommend style: Clear image with simple background.
                             </p>
                         </div>
@@ -167,9 +167,9 @@ export default function ProductForm() {
                                         checked={formData.isAvailable}
                                         onChange={handleChange}
                                     />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                    <div className="w-11 h-6 bg-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                                 </div>
-                                <span className="text-sm font-medium text-gray-700">Display in Menu</span>
+                                <span className="text-sm font-medium text-dark-2">Display in Menu</span>
                             </label>
                         </div>
                     </Card>
@@ -208,16 +208,16 @@ export default function ProductForm() {
                                 placeholder="0.00"
                                 required
                             />
-                            <div className="md:col-span-2 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+                            <div className="md:col-span-2 rounded-2xl bg-light p-4 text-sm text-dark-2">
                                 Price preview: <span className="font-semibold text-dark">{formatLKR(formData.price || 0)}</span>
                             </div>
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-medium text-gray-700">Category</label>
+                                <label className="text-sm font-medium text-dark-2">Category</label>
                                 <select
                                     name="category"
                                     value={formData.category}
                                     onChange={handleChange}
-                                    className="w-full rounded-lg border border-gray-200 bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                    className="w-full rounded-lg border-border bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                                     required
                                 >
                                     <option value="">Select Category</option>
@@ -236,13 +236,13 @@ export default function ProductForm() {
                                 required
                             />
                             <div className="md:col-span-2 flex flex-col gap-1.5">
-                                <label className="text-sm font-medium text-gray-700">Description</label>
+                                <label className="text-sm font-medium text-dark-2">Description</label>
                                 <textarea
                                     name="description"
                                     value={formData.description}
                                     onChange={handleChange}
                                     rows={4}
-                                    className="w-full rounded-lg border border-gray-200 bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                    className="w-full rounded-lg border-border bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                                     placeholder="Brief description of the product..."
                                 />
                             </div>

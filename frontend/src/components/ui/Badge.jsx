@@ -7,11 +7,11 @@ export default function Badge({
     className
 }) {
     const variants = {
-        neutral: 'bg-gray-100 text-gray-600',
+        neutral: 'bg-light text-dark-2',
         primary: 'bg-primary/10 text-primary',
-        secondary: 'bg-secondary/10 text-secondary',
-        success: 'bg-success/10 text-success',
-        danger: 'bg-danger/10 text-danger',
+        secondary: 'bg-orange-50 text-secondary',
+        success: 'bg-light-green text-success',
+        danger: 'bg-light-red text-danger',
         warning: 'bg-amber-100 text-amber-600',
     };
 

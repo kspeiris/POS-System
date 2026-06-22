@@ -45,7 +45,7 @@ export default function Orders() {
                 <div>
                     <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Orders</p>
                     <h1 className="text-3xl font-bold text-dark mt-1">Order History</h1>
-                    <p className="text-slate-500 text-sm">View and manage all your past orders.</p>
+                    <p className="text-gray text-sm">View and manage all your past orders.</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <Button variant="secondary" className="flex items-center gap-2">
@@ -56,7 +56,7 @@ export default function Orders() {
             </div>
 
             <Card className="flex flex-col">
-                <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div className="p-4 border-b border-border flex flex-col md:flex-row gap-4 items-center justify-between">
                     <div className="relative w-full md:w-96">
                         <Input
                             placeholder="Search by order ID..."
@@ -93,14 +93,14 @@ export default function Orders() {
                                 <div className="flex items-center gap-2">
                                     <button
                                         onClick={() => navigate(`/orders/${order._id}`)}
-                                        className="p-2 text-gray-400 hover:text-primary transition-colors"
+                                        className="p-2 text-gray hover:text-primary transition-colors"
                                         title="View Details"
                                     >
                                         <Eye size={18} />
                                     </button>
                                     <button
                                         onClick={() => window.open(`/orders/${order._id}/receipt`, '_blank')}
-                                        className="p-2 text-gray-400 hover:text-dark transition-colors"
+                                        className="p-2 text-gray hover:text-dark transition-colors"
                                         title="Print Receipt"
                                     >
                                         <Printer size={18} />
@@ -112,7 +112,7 @@ export default function Orders() {
                 </Table>
 
                 {filteredOrders.length === 0 && (
-                    <div className="p-12 text-center text-slate-500">
+                    <div className="p-12 text-center text-gray">
                         No orders found matching your search.
                     </div>
                 )}
