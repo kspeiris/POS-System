@@ -9,11 +9,11 @@ export default function Button({
     ...props
 }) {
     const variants = {
-        primary: 'bg-primary text-white hover:bg-primary-hover shadow-lg shadow-primary/15',
-        secondary: 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50',
-        danger: 'bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-600/15',
-        success: 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/15',
-        ghost: 'bg-transparent text-slate-600 hover:bg-slate-100',
+        primary: 'bg-primary text-white hover:bg-primary-hover shadow-card',
+        secondary: 'bg-white text-dark-2 border border-border hover:bg-light',
+        danger: 'bg-danger text-white hover:bg-red-700 shadow-card',
+        success: 'bg-success text-white hover:bg-emerald-700 shadow-card',
+        ghost: 'bg-transparent text-dark-2 hover:bg-light',
     };
 
     const sizes = {
@@ -25,7 +25,7 @@ export default function Button({
     return (
         <button
             className={twMerge(
-                'inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2',
+                'inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 text-sm',
                 variants[variant],
                 sizes[size],
                 className
