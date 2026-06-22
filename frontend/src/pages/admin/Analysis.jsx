@@ -67,38 +67,38 @@ export default function AnalysisAdmin() {
             <div className="glass rounded-3xl p-6 sm:p-8">
                 <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Analysis</p>
                 <h1 className="text-3xl font-bold text-dark mt-1">Admin Analysis</h1>
-                <p className="text-slate-500 text-sm">Operational insights for management and planning.</p>
+                <p className="text-gray text-sm">Operational insights for management and planning.</p>
             </div>
 
             <div className="glass rounded-3xl p-5 flex flex-col lg:flex-row lg:items-end gap-4">
-                <div className="flex items-center gap-3 text-sm font-semibold text-slate-600 shrink-0">
+                <div className="flex items-center gap-3 text-sm font-semibold text-dark-2 shrink-0">
                     <CalendarRange size={18} className="text-primary" />
                     Date range
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
-                    <label className="flex flex-col gap-1.5 text-sm text-slate-600">
+                    <label className="flex flex-col gap-1.5 text-sm text-dark-2">
                         From
                         <input
                             type="date"
                             value={dateRange.from}
                             onChange={(e) => setDateRange((prev) => ({ ...prev, from: e.target.value }))}
-                            className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
+                            className="rounded-xl border-border bg-white px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                         />
                     </label>
-                    <label className="flex flex-col gap-1.5 text-sm text-slate-600">
+                    <label className="flex flex-col gap-1.5 text-sm text-dark-2">
                         To
                         <input
                             type="date"
                             value={dateRange.to}
                             onChange={(e) => setDateRange((prev) => ({ ...prev, to: e.target.value }))}
-                            className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
+                            className="rounded-xl border-border bg-white px-3 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                         />
                     </label>
                 </div>
             </div>
 
             {error && (
-                <div className="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <div className="rounded-2xl border border-light-red bg-light-red px-4 py-3 text-sm text-danger">
                     {error}
                 </div>
             )}
@@ -106,14 +106,14 @@ export default function AnalysisAdmin() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                 {[
                     { label: 'Revenue', value: formatLKR(filteredOrders.reduce((sum, order) => sum + (order.total || 0), 0)), icon: DollarSign, color: 'text-primary bg-primary/10' },
-                    { label: 'Orders', value: filteredOrders.length.toString(), icon: ShoppingBag, color: 'text-blue-600 bg-blue-50' },
-                    { label: 'Average Ticket', value: formatLKR(avgOrder), icon: TrendingUp, color: 'text-emerald-600 bg-emerald-50' },
-                    { label: 'Staff Members', value: staff.length.toString(), icon: Users, color: 'text-violet-600 bg-violet-50' },
+                    { label: 'Orders', value: filteredOrders.length.toString(), icon: ShoppingBag, color: 'text-primary bg-light-blue' },
+                    { label: 'Average Ticket', value: formatLKR(avgOrder), icon: TrendingUp, color: 'text-success bg-light-green' },
+                    { label: 'Staff Members', value: staff.length.toString(), icon: Users, color: 'text-secondary bg-orange-50' },
                 ].map((item) => (
                     <Card key={item.label} className="rounded-[1.75rem]">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-slate-500 font-medium">{item.label}</p>
+                                <p className="text-sm text-gray font-medium">{item.label}</p>
                                 <h3 className="text-2xl font-bold text-dark mt-1">{item.value}</h3>
                             </div>
                             <div className={`p-3 rounded-xl ${item.color}`}>
@@ -130,24 +130,24 @@ export default function AnalysisAdmin() {
                         <svg viewBox="0 0 100 100" className="w-full h-full">
                             <defs>
                                 <linearGradient id="adminTrendFill" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#0f766e" stopOpacity="0.35" />
-                                    <stop offset="100%" stopColor="#0f766e" stopOpacity="0.02" />
+                            <stop offset="0%" stopColor="#2563EB" stopOpacity="0.35" />
+                            <stop offset="100%" stopColor="#2563EB" stopOpacity="0.02" />
                                 </linearGradient>
                             </defs>
-                            <polyline fill="none" stroke="#0f766e" strokeWidth="2.5" points={chartPoints} />
+                            <polyline fill="none" stroke="#2563EB" strokeWidth="2.5" points={chartPoints} />
                             <polyline fill="url(#adminTrendFill)" stroke="none" points={`0,100 ${chartPoints} 100,100`} />
                             {series.map((point, index) => {
                                 const x = series.length === 1 ? 0 : (index / (series.length - 1)) * 100;
                                 const y = 100 - (point.value / maxSeries) * 100;
                                 return (
-                                    <circle key={point.label} cx={x} cy={y} r="1.7" fill="#0f766e" />
+                                <circle key={point.label} cx={x} cy={y} r="1.7" fill="#2563EB" />
                                 );
                             })}
                         </svg>
                     </div>
                     <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
                         {series.map((point) => (
-                            <span key={point.label} className="min-w-8 text-center text-xs font-semibold text-slate-500">
+                            <span key={point.label} className="min-w-8 text-center text-xs font-semibold text-gray">
                                 {point.label}
                             </span>
                         ))}
@@ -157,16 +157,16 @@ export default function AnalysisAdmin() {
                 <Card title="Order Status Split" subtitle="Current mix of completed and pending orders" className="rounded-[2rem]">
                     <div className="space-y-4">
                         {[
-                            { label: 'Completed', value: completed, color: 'bg-emerald-500' },
-                            { label: 'Pending', value: pending, color: 'bg-amber-500' },
-                            { label: 'Other', value: orders.length - completed - pending, color: 'bg-slate-300' },
+                            { label: 'Completed', value: completed, color: 'bg-success' },
+                            { label: 'Pending', value: pending, color: 'bg-secondary' },
+                            { label: 'Other', value: orders.length - completed - pending, color: 'bg-border' },
                         ].map((item) => (
                             <div key={item.label} className="space-y-1">
                                 <div className="flex justify-between text-sm">
                                     <span className="font-medium text-dark">{item.label}</span>
-                                    <span className="text-slate-500">{item.value}</span>
+                                    <span className="text-gray">{item.value}</span>
                                 </div>
-                                <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
+                                <div className="h-2 rounded-full bg-light overflow-hidden">
                                     <div
                                         className={`h-full ${item.color}`}
                                         style={{ width: `${filteredOrders.length ? (item.value / filteredOrders.length) * 100 : 0}%` }}
@@ -180,18 +180,18 @@ export default function AnalysisAdmin() {
                 <Card title="Recent Activity" subtitle="Latest orders processed" className="rounded-[2rem]">
                     <div className="space-y-4 max-h-[320px] overflow-y-auto pr-1">
                         {(filteredOrders.slice(0, 6)).map((order) => (
-                            <div key={order._id} className="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
+                            <div key={order._id} className="flex items-center justify-between rounded-2xl bg-light px-4 py-3">
                                 <div>
                                     <p className="font-semibold text-dark">{order.orderNo}</p>
-                                    <p className="text-xs text-slate-500">{dayjs(order.createdAt).format('MMM D, HH:mm')}</p>
+                                    <p className="text-xs text-gray">{dayjs(order.createdAt).format('MMM D, HH:mm')}</p>
                                 </div>
                                 <div className="text-right">
                             <p className="font-semibold text-dark">{formatLKR(order.total)}</p>
-                                    <p className="text-xs text-slate-500 capitalize">{order.status}</p>
+                                    <p className="text-xs text-gray capitalize">{order.status}</p>
                                 </div>
                             </div>
                         ))}
-                        {filteredOrders.length === 0 && <p className="text-sm text-slate-500 text-center py-4">No analysis data for this range.</p>}
+                        {filteredOrders.length === 0 && <p className="text-sm text-gray text-center py-4">No analysis data for this range.</p>}
                     </div>
                 </Card>
 
@@ -199,11 +199,11 @@ export default function AnalysisAdmin() {
                     <div className="space-y-4">
                         <div className="rounded-2xl bg-primary/5 p-4">
                             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Revenue</p>
-                            <p className="mt-2 text-sm text-slate-600">Average order value is {formatLKR(avgOrder)} across {filteredOrders.length} orders.</p>
+                            <p className="mt-2 text-sm text-dark-2">Average order value is {formatLKR(avgOrder)} across {filteredOrders.length} orders.</p>
                         </div>
-                        <div className="rounded-2xl bg-slate-50 p-4">
-                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Timing</p>
-                            <p className="mt-2 text-sm text-slate-600 flex items-center gap-2">
+                        <div className="rounded-2xl bg-light p-4">
+                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray">Timing</p>
+                            <p className="mt-2 text-sm text-dark-2 flex items-center gap-2">
                                 <Clock3 size={16} />
                                 Inspect daily reports for date-specific trends.
                             </p>
