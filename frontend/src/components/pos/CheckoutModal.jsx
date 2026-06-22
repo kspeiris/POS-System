@@ -26,9 +26,9 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
     };
 
     const paymentMethods = [
-        { id: 'cash', label: 'Cash', icon: Banknote, color: 'text-green-600 bg-green-50' },
-        { id: 'card', label: 'Credit Card', icon: CreditCard, color: 'text-blue-600 bg-blue-50' },
-        { id: 'qr', label: 'QR Code', icon: QrCode, color: 'text-purple-600 bg-purple-50' },
+        { id: 'cash', label: 'Cash', icon: Banknote, color: 'text-success bg-light-green' },
+        { id: 'card', label: 'Credit Card', icon: CreditCard, color: 'text-primary bg-light-blue' },
+        { id: 'qr', label: 'QR Code', icon: QrCode, color: 'text-secondary bg-orange-50' },
     ];
 
     return (
@@ -42,7 +42,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
 
                 {/* Payment Methods */}
                 <div className="space-y-3">
-                    <label className="text-sm font-semibold text-slate-700">Select Payment Method</label>
+                    <label className="text-sm font-semibold text-dark-2">Select Payment Method</label>
                     <div className="grid grid-cols-3 gap-3">
                         {paymentMethods.map((method) => (
                             <button
@@ -50,14 +50,14 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                                 type="button"
                                 onClick={() => setPaymentMethod(method.id)}
                             className={`flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all gap-2 ${paymentMethod === method.id
-                                        ? 'border-primary bg-primary/5 ring-4 ring-primary/10'
-                                        : 'border-slate-100 bg-white hover:border-slate-200'
+                                ? 'border-primary bg-primary/5 ring-4 ring-primary/10'
+                                        : 'border-border bg-white hover:border-border'
                                     }`}
                             >
                                 <div className={`p-2 rounded-lg ${method.color}`}>
                                     <method.icon size={20} />
                                 </div>
-                                <span className={`text-xs font-bold ${paymentMethod === method.id ? 'text-primary' : 'text-slate-500'}`}>
+                                <span className={`text-xs font-bold ${paymentMethod === method.id ? 'text-primary' : 'text-gray'}`}>
                                     {method.label}
                                 </span>
                             </button>
@@ -69,15 +69,15 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                 {paymentMethod === 'cash' && (
                     <div className="space-y-4 animate-in slide-in-from-top-2 duration-300">
                         <div className="space-y-2">
-                            <label className="text-sm font-semibold text-slate-700">Amount Received</label>
+                            <label className="text-sm font-semibold text-dark-2">Amount Received</label>
                             <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">LKR</span>
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray font-bold">LKR</span>
                                 <input
                                     type="number"
                                     step="0.01"
                                     value={amountReceived}
                                     onChange={(e) => setAmountReceived(e.target.value)}
-                                    className="w-full bg-slate-50 border-none rounded-2xl py-4 pl-8 pr-4 text-2xl font-bold focus:ring-2 focus:ring-primary transition-all"
+                                    className="w-full bg-light border-none rounded-2xl py-4 pl-8 pr-4 text-2xl font-bold focus:ring-2 focus:ring-primary transition-all"
                                     placeholder="0.00"
                                     autoFocus
                                 />
@@ -91,7 +91,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                                     key={amount}
                                     type="button"
                                     onClick={() => setAmountReceived(amount.toString())}
-                                    className="flex-1 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all"
+                                    className="flex-1 py-2 bg-white border border-border rounded-xl text-sm font-bold text-dark-2 hover:bg-light hover:border-border transition-all"
                                 >
                                     LKR {amount}
                                 </button>
@@ -99,7 +99,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                         </div>
 
                         {/* Change Display */}
-                        <div className={`p-4 rounded-xl flex justify-between items-center ${change >= 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                        <div className={`p-4 rounded-xl flex justify-between items-center ${change >= 0 ? 'bg-light-green text-success' : 'bg-light-red text-danger'}`}>
                             <span className="text-sm font-medium">Change to return:</span>
                             <span className="text-xl font-bold">{formatLKR(Math.max(0, change))}</span>
                         </div>
