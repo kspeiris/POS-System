@@ -17,8 +17,7 @@ export default function Dashboard() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [orders, setOrders] = useState([]);
-    const [users, setUsers] = useState([]);
-    const [stats, setStats] = useState([]);
+        const [stats, setStats] = useState([]);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -30,8 +29,7 @@ export default function Dashboard() {
 
                 const allOrders = ordersRes.data;
                 setOrders(allOrders);
-                setUsers(usersRes.data);
-
+                
                 const revenue = allOrders.reduce((acc, o) => acc + o.total, 0);
                 const avgValue = allOrders.length > 0 ? revenue / allOrders.length : 0;
 

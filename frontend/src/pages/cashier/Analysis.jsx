@@ -66,15 +66,15 @@ export default function AnalysisCashier() {
     if (isLoading) return <Loader fullPage />;
 
     return (
-        <div className="space-y-6">
-            <div>
+        <div className="space-y-6 max-w-[1400px] mx-auto">
+            <div className="glass rounded-3xl p-6 sm:p-8">
                 <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Analysis</p>
                 <h1 className="text-3xl font-bold text-dark mt-1">Cashier Analysis</h1>
                 <p className="text-slate-500 text-sm">Today's performance and service rhythm.</p>
             </div>
 
-            <div className="glass rounded-3xl p-4 flex flex-col lg:flex-row lg:items-end gap-4">
-                <div className="flex items-center gap-3 text-sm font-semibold text-slate-600">
+            <div className="glass rounded-3xl p-5 flex flex-col lg:flex-row lg:items-end gap-4">
+                <div className="flex items-center gap-3 text-sm font-semibold text-slate-600 shrink-0">
                     <CalendarRange size={18} className="text-primary" />
                     Date range
                 </div>
@@ -112,7 +112,7 @@ export default function AnalysisCashier() {
                     { label: 'Orders in Range', value: filteredOrders.length.toString(), icon: ShoppingBag, color: 'text-blue-600 bg-blue-50' },
                     { label: 'Avg Ticket', value: formatLKR(avgTicket), icon: TrendingUp, color: 'text-emerald-600 bg-emerald-50' },
                 ].map((item) => (
-                    <Card key={item.label}>
+                    <Card key={item.label} className="rounded-[1.75rem]">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-slate-500 font-medium">{item.label}</p>
@@ -127,8 +127,8 @@ export default function AnalysisCashier() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card title="Revenue Trend" subtitle="Last 7 days within your selected range">
-                    <div className="h-64">
+                <Card title="Revenue Trend" subtitle="Last 7 days within your selected range" className="rounded-[2rem]">
+                    <div className="h-72">
                         <svg viewBox="0 0 100 100" className="w-full h-full">
                             <defs>
                                 <linearGradient id="cashierTrendFill" x1="0" y1="0" x2="0" y2="1">
@@ -147,8 +147,8 @@ export default function AnalysisCashier() {
                     </div>
                 </Card>
 
-                <Card title="Peak Payment Method" subtitle="Most-used payment option in range">
-                    <div className="rounded-2xl bg-slate-50 p-4 flex items-center justify-between">
+                <Card title="Peak Payment Method" subtitle="Most-used payment option in range" className="rounded-[2rem]">
+                    <div className="rounded-2xl bg-slate-50 p-5 flex items-center justify-between">
                         <div>
                             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Method</p>
                             <p className="mt-2 text-lg font-bold text-dark capitalize">{topPayment.method}</p>
@@ -161,7 +161,7 @@ export default function AnalysisCashier() {
                 </Card>
             </div>
 
-            <Card title="Recent Tickets" subtitle="Your latest orders in the selected range">
+            <Card title="Recent Tickets" subtitle="Your latest orders in the selected range" className="rounded-[2rem]">
                 <div className="space-y-3 max-h-[320px] overflow-y-auto pr-1">
                     {filteredOrders.slice(0, 6).map((order) => (
                         <div key={order._id} className="rounded-2xl bg-slate-50 px-4 py-3 flex items-center justify-between">

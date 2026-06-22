@@ -11,18 +11,17 @@ import { formatLKR } from '../../utils/money';
 export default function CartPanel() {
     const { cart, removeFromCart, updateQuantity, subtotal, tax, total, clearCart } = useCart();
     const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [feedback, setFeedback] = useState('');
+        const [feedback, setFeedback] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setFeedback('');
     }, [cart.length]);
 
     const handleCheckoutConfirm = async (orderData) => {
         try {
-            setIsProcessing(true);
-            const items = cart.map(item => ({
+                        const items = cart.map(item => ({
                 product: item._id || item.id,
                 name: item.name,
                 qty: item.quantity,
@@ -49,8 +48,6 @@ export default function CartPanel() {
         } catch (error) {
             console.error('Error creating order:', error);
             setFeedback(error.response?.data?.message || 'Failed to create order');
-        } finally {
-            setIsProcessing(false);
         }
     };
 
