@@ -63,15 +63,15 @@ export default function AnalysisAdmin() {
     if (isLoading) return <Loader fullPage />;
 
     return (
-        <div className="space-y-6">
-            <div>
+        <div className="space-y-6 max-w-[1400px] mx-auto">
+            <div className="glass rounded-3xl p-6 sm:p-8">
                 <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Analysis</p>
                 <h1 className="text-3xl font-bold text-dark mt-1">Admin Analysis</h1>
                 <p className="text-slate-500 text-sm">Operational insights for management and planning.</p>
             </div>
 
-            <div className="glass rounded-3xl p-4 flex flex-col lg:flex-row lg:items-end gap-4">
-                <div className="flex items-center gap-3 text-sm font-semibold text-slate-600">
+            <div className="glass rounded-3xl p-5 flex flex-col lg:flex-row lg:items-end gap-4">
+                <div className="flex items-center gap-3 text-sm font-semibold text-slate-600 shrink-0">
                     <CalendarRange size={18} className="text-primary" />
                     Date range
                 </div>
@@ -110,7 +110,7 @@ export default function AnalysisAdmin() {
                     { label: 'Average Ticket', value: formatLKR(avgOrder), icon: TrendingUp, color: 'text-emerald-600 bg-emerald-50' },
                     { label: 'Staff Members', value: staff.length.toString(), icon: Users, color: 'text-violet-600 bg-violet-50' },
                 ].map((item) => (
-                    <Card key={item.label}>
+                    <Card key={item.label} className="rounded-[1.75rem]">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-slate-500 font-medium">{item.label}</p>
@@ -125,8 +125,8 @@ export default function AnalysisAdmin() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <Card title="Revenue Trend" subtitle="Daily sales over the selected range" className="lg:col-span-2">
-                    <div className="h-72">
+                <Card title="Revenue Trend" subtitle="Daily sales over the selected range" className="lg:col-span-2 rounded-[2rem]">
+                    <div className="h-80">
                         <svg viewBox="0 0 100 100" className="w-full h-full">
                             <defs>
                                 <linearGradient id="adminTrendFill" x1="0" y1="0" x2="0" y2="1">
@@ -154,7 +154,7 @@ export default function AnalysisAdmin() {
                     </div>
                 </Card>
 
-                <Card title="Order Status Split" subtitle="Current mix of completed and pending orders">
+                <Card title="Order Status Split" subtitle="Current mix of completed and pending orders" className="rounded-[2rem]">
                     <div className="space-y-4">
                         {[
                             { label: 'Completed', value: completed, color: 'bg-emerald-500' },
@@ -177,7 +177,7 @@ export default function AnalysisAdmin() {
                     </div>
                 </Card>
 
-                <Card title="Recent Activity" subtitle="Latest orders processed">
+                <Card title="Recent Activity" subtitle="Latest orders processed" className="rounded-[2rem]">
                     <div className="space-y-4 max-h-[320px] overflow-y-auto pr-1">
                         {(filteredOrders.slice(0, 6)).map((order) => (
                             <div key={order._id} className="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
@@ -195,7 +195,7 @@ export default function AnalysisAdmin() {
                     </div>
                 </Card>
 
-                <Card title="Insights" subtitle="Quick summary">
+                <Card title="Insights" subtitle="Quick summary" className="rounded-[2rem]">
                     <div className="space-y-4">
                         <div className="rounded-2xl bg-primary/5 p-4">
                             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Revenue</p>
