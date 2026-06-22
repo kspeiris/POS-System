@@ -40,7 +40,7 @@ export default function OrderDetails() {
             <div className="flex items-center gap-4">
                 <button
                     onClick={() => navigate('/orders')}
-                    className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                    className="p-2 rounded-full hover:bg-light transition-colors"
                 >
                     <ArrowLeft size={20} />
                 </button>
@@ -67,23 +67,23 @@ export default function OrderDetails() {
                     <Card title="Payment Information">
                         <div className="space-y-4">
                             <div className="flex justify-between items-center">
-                                <span className="text-gray-500">Subtotal</span>
+                                <span className="text-gray">Subtotal</span>
                                 <span className="font-medium text-dark">{formatLKR(order.subtotal)}</span>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-gray-500">Tax (10%)</span>
+                                <span className="text-gray">Tax (10%)</span>
                                 <span className="font-medium text-dark">{formatLKR(order.tax)}</span>
                             </div>
-                            <div className="flex justify-between items-center pt-4 border-t border-dashed border-gray-200">
+                            <div className="flex justify-between items-center pt-4 border-t border-dashed border-border">
                                 <span className="text-lg font-bold text-dark">Total</span>
                                 <span className="text-xl font-bold text-primary">{formatLKR(order.total)}</span>
                             </div>
                             <div className="flex justify-between items-center pt-4 text-sm">
-                                <span className="text-gray-500">Amount Paid ({order.payment.method})</span>
+                                <span className="text-gray">Amount Paid ({order.payment.method})</span>
                                 <span className="font-medium text-dark">{formatLKR(order.payment.amountPaid)}</span>
                             </div>
                             <div className="flex justify-between items-center text-sm">
-                                <span className="text-gray-500">Change</span>
+                                <span className="text-gray">Change</span>
                                 <span className="font-medium text-success">{formatLKR(order.payment.change)}</span>
                             </div>
                         </div>
@@ -95,29 +95,29 @@ export default function OrderDetails() {
                     <Card title="Order Info">
                         <div className="space-y-4">
                             <div className="flex items-start gap-3">
-                                <div className="p-2 bg-gray-50 rounded-lg text-gray-400">
+                                <div className="p-2 bg-light rounded-lg text-gray">
                                     <Calendar size={18} />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-gray-500 uppercase">Date</p>
+                                    <p className="text-xs text-gray uppercase">Date</p>
                                     <p className="text-sm font-medium">{dayjs(order.createdAt).format('MMMM D, YYYY')}</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
-                                <div className="p-2 bg-gray-50 rounded-lg text-gray-400">
+                                <div className="p-2 bg-light rounded-lg text-gray">
                                     <Clock size={18} />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-gray-500 uppercase">Time</p>
+                                    <p className="text-xs text-gray uppercase">Time</p>
                                     <p className="text-sm font-medium">{dayjs(order.createdAt).format('hh:mm A')}</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
-                                <div className="p-2 bg-gray-50 rounded-lg text-gray-400">
+                                <div className="p-2 bg-light rounded-lg text-gray">
                                     <CreditCard size={18} />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-gray-500 uppercase">Payment Method</p>
+                                    <p className="text-xs text-gray uppercase">Payment Method</p>
                                     <p className="text-sm font-medium capitalize">{order.payment.method}</p>
                                 </div>
                             </div>
