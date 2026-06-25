@@ -159,7 +159,7 @@ export default function AnalysisAdmin() {
                         {[
                             { label: 'Completed', value: completed, color: 'bg-success' },
                             { label: 'Pending', value: pending, color: 'bg-secondary' },
-                            { label: 'Other', value: orders.length - completed - pending, color: 'bg-border' },
+                            { label: 'Other', value: filteredOrders.length - completed - pending, color: 'bg-border' },
                         ].map((item) => (
                             <div key={item.label} className="space-y-1">
                                 <div className="flex justify-between text-sm">
