@@ -11,8 +11,10 @@ import { formatLKR } from '../../utils/money';
 export default function CartPanel() {
     const { cart, removeFromCart, updateQuantity, subtotal, tax, total, clearCart } = useCart();
     const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-        const [feedback, setFeedback] = useState('');
+    const [feedback, setFeedback] = useState('');
     const navigate = useNavigate();
+
+    const getItemId = (item) => item._id || item.id;
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -21,8 +23,8 @@ export default function CartPanel() {
 
     const handleCheckoutConfirm = async (orderData) => {
         try {
-                        const items = cart.map(item => ({
-                product: item._id || item.id,
+            const items = cart.map(item => ({
+                product: getItemId(item),
                 name: item.name,
                 qty: item.quantity,
                 price: item.price,
@@ -73,7 +75,7 @@ export default function CartPanel() {
                     </div>
                 ) : (
                     cart.map((item) => (
-                        <div key={item.id} className="flex gap-4 p-3 bg-light rounded-2xl border border-border group">
+                        <div key={getItemId(item)} className="flex gap-4 p-3 bg-light rounded-2xl border border-border group">
                             <div className="w-16 h-16 bg-white rounded-xl border border-border flex items-center justify-center shrink-0">
                                 <span className="text-xl font-bold text-gray">{item.name.charAt(0)}</span>
                             </div>
@@ -87,14 +89,16 @@ export default function CartPanel() {
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3 bg-white rounded-xl border border-border px-2 py-1">
                                         <button
-                                            onClick={() => updateQuantity(item.id, -1)}
+                                            type="button"
+                                            onClick={() => updateQuantity(getItemId(item), -1)}
                                             className="text-gray hover:text-danger transition-colors"
                                         >
                                             <Minus className="w-3 h-3" />
                                         </button>
                                         <span className="text-sm font-semibold w-4 text-center">{item.quantity}</span>
                                         <button
-                                            onClick={() => updateQuantity(item.id, 1)}
+                                            type="button"
+                                            onClick={() => updateQuantity(getItemId(item), 1)}
                                             className="text-gray hover:text-success transition-colors"
                                         >
                                             <Plus className="w-3 h-3" />
@@ -107,7 +111,8 @@ export default function CartPanel() {
                             </div>
 
                             <button
-                                onClick={() => removeFromCart(item.id)}
+                                type="button"
+                                onClick={() => removeFromCart(getItemId(item))}
                                 className="self-start text-gray hover:text-danger opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                                 <Trash2 className="w-4 h-4" />
@@ -159,6 +164,7 @@ export default function CartPanel() {
             </div>
 
             <CheckoutModal
+                key={`${isCheckoutOpen}-${total}`}
                 isOpen={isCheckoutOpen}
                 onClose={() => setIsCheckoutOpen(false)}
                 total={total}
