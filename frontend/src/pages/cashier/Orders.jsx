@@ -99,7 +99,7 @@ export default function Orders() {
                                         <Eye size={18} />
                                     </button>
                                     <button
-                                        onClick={() => window.open(`/orders/${order._id}/receipt`, '_blank')}
+                                        onClick={() => window.open(`${window.location.origin}/orders/${order._id}/receipt`, '_blank', 'noopener,noreferrer')}
                                         className="p-2 text-gray hover:text-dark transition-colors"
                                         title="Print Receipt"
                                     >

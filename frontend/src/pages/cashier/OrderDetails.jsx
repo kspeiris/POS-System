@@ -56,9 +56,9 @@ export default function OrderDetails() {
                             {order.items.map((item, idx) => (
                                 <TableRow key={idx}>
                                     <TableCell className="font-medium text-dark">{item.name}</TableCell>
-                                    <TableCell>${item.price.toFixed(2)}</TableCell>
+                                    <TableCell>{formatLKR(item.price)}</TableCell>
                                     <TableCell>{item.qty}</TableCell>
-                                    <TableCell className="font-bold">${item.total.toFixed(2)}</TableCell>
+                                    <TableCell className="font-bold">{formatLKR(item.total)}</TableCell>
                                 </TableRow>
                             ))}
                         </Table>

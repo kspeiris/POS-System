@@ -186,24 +186,39 @@ export const getDailyReport = async (req, res) => {
         const orders = await Order.find({
             createdAt: { $gte: start, $lte: end },
             status: 'completed',
-        });
+        }).populate('items.product', 'name category');
 
         const totalSales = orders.reduce((acc, order) => acc + order.total, 0);
         const totalOrders = orders.length;
+        const avgOrderValue = totalOrders > 0 ? totalSales / totalOrders : 0;
 
-        // Aggregation for payment methods
         const paymentBreakdown = {
             cash: orders.filter(o => o.payment.method === 'cash').reduce((acc, o) => acc + o.total, 0),
             card: orders.filter(o => o.payment.method === 'card').reduce((acc, o) => acc + o.total, 0),
             qr: orders.filter(o => o.payment.method === 'qr').reduce((acc, o) => acc + o.total, 0),
         };
 
+        const salesByCategoryMap = new Map();
+        for (const order of orders) {
+            for (const item of order.items) {
+                const category = item.product?.category || 'Uncategorized';
+                const itemTotal = Number(item.total) || 0;
+                salesByCategoryMap.set(category, (salesByCategoryMap.get(category) || 0) + itemTotal);
+            }
+        }
+
+        const salesByCategory = Array.from(salesByCategoryMap.entries())
+            .map(([category, sales]) => ({ category, sales }))
+            .sort((a, b) => b.sales - a.sales);
+
         res.json({
             date: start.toISOString().split('T')[0],
             totalSales,
             totalOrders,
+            avgOrderValue,
             paymentBreakdown,
-            orders: orders.slice(0, 50), // Send last 50 orders for summary
+            salesByCategory,
+            recentOrders: orders.slice(0, 20),
         });
     } catch (error) {
         res.status(500).json({ message: error.message });

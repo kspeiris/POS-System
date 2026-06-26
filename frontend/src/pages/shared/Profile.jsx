@@ -9,16 +9,53 @@ import Badge from '../../components/ui/Badge';
 import Modal from '../../components/ui/Modal';
 
 export default function Profile() {
-    const { user, logout } = useAuth();
+    const { user, logout, updateProfile } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [isPasswordOpen, setIsPasswordOpen] = useState(false);
+    const [feedback, setFeedback] = useState('');
+    const [passwordState, setPasswordState] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+    });
     const [formState, setFormState] = useState({
         name: user?.name || '',
         email: user?.email || '',
     });
 
+    const handleSaveProfile = () => {
+        setFeedback('');
+        updateProfile({
+            name: formState.name.trim(),
+            email: formState.email.trim().toLowerCase(),
+        });
+        setIsEditing(false);
+        setFeedback('Profile updated.');
+    };
+
+    const handlePasswordSave = () => {
+        if (!passwordState.newPassword || passwordState.newPassword.length < 6) {
+            setFeedback('New password must be at least 6 characters.');
+            return;
+        }
+
+        if (passwordState.newPassword !== passwordState.confirmPassword) {
+            setFeedback('Passwords do not match.');
+            return;
+        }
+
+        setPasswordState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+        setIsPasswordOpen(false);
+        setFeedback('Password changes are not connected to the backend yet.');
+    };
+
     return (
         <div className="max-w-4xl mx-auto space-y-6">
+            {feedback && (
+                <div className="rounded-2xl border border-border bg-white/80 px-4 py-3 text-sm text-dark-2 shadow-card">
+                    {feedback}
+                </div>
+            )}
             <div className="flex items-center justify-between gap-4">
                 <div>
                     <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Account</p>
@@ -69,11 +106,11 @@ export default function Profile() {
                             <div className="pt-4 flex justify-end gap-3">
                                 {isEditing ? (
                                     <>
-                                        <Button variant="ghost" type="button" onClick={() => setIsEditing(false)}>Cancel</Button>
-                                        <Button type="button" onClick={() => setIsEditing(false)}>Save Changes</Button>
-                                    </>
-                                ) : (
-                                    <Button type="button" onClick={() => setIsEditing(true)}>Edit Profile</Button>
+                                    <Button variant="ghost" type="button" onClick={() => setIsEditing(false)}>Cancel</Button>
+                                    <Button type="button" onClick={handleSaveProfile}>Save Changes</Button>
+                                </>
+                            ) : (
+                                <Button type="button" onClick={() => setIsEditing(true)}>Edit Profile</Button>
                                 )}
                             </div>
                         </form>
@@ -100,14 +137,29 @@ export default function Profile() {
 
             <Modal isOpen={isPasswordOpen} onClose={() => setIsPasswordOpen(false)} title="Change Password">
                 <form className="space-y-4">
-                    <Input label="Current Password" type="password" />
-                    <Input label="New Password" type="password" />
-                    <Input label="Confirm New Password" type="password" />
+                    <Input
+                        label="Current Password"
+                        type="password"
+                        value={passwordState.currentPassword}
+                        onChange={(e) => setPasswordState((prev) => ({ ...prev, currentPassword: e.target.value }))}
+                    />
+                    <Input
+                        label="New Password"
+                        type="password"
+                        value={passwordState.newPassword}
+                        onChange={(e) => setPasswordState((prev) => ({ ...prev, newPassword: e.target.value }))}
+                    />
+                    <Input
+                        label="Confirm New Password"
+                        type="password"
+                        value={passwordState.confirmPassword}
+                        onChange={(e) => setPasswordState((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+                    />
                     <div className="pt-4 flex gap-3">
                         <Button variant="ghost" type="button" className="flex-1" onClick={() => setIsPasswordOpen(false)}>
                             Cancel
                         </Button>
-                        <Button type="button" className="flex-1" onClick={() => setIsPasswordOpen(false)}>
+                        <Button type="button" className="flex-1" onClick={handlePasswordSave}>
                             Save Password
                         </Button>
                     </div>
