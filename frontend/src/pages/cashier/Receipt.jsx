@@ -1,12 +1,14 @@
 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { orderApi } from '../../api/orderApi';
+import { formatLKR } from '../../utils/money';
 import Loader from '../../components/ui/Loader';
 
 export default function Receipt() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [order, setOrder] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -53,7 +55,7 @@ export default function Receipt() {
             {/* Action Bar (Hidden on print) */}
             <div className="mb-6 flex gap-4 print:hidden">
                 <button
-                        onClick={() => window.close()}
+                        onClick={() => navigate('/pos')}
                         className="px-6 py-2 bg-white border border-border rounded-lg text-sm font-medium hover:bg-light"
                     >
                     Close

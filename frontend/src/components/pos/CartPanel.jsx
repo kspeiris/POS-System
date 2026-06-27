@@ -102,8 +102,12 @@ export default function CartPanel() {
                                 justAdded === getItemId(item) ? 'animate-bounce-in bg-primary/5 border-primary/30' : 'bg-light hover:bg-white'
                             }`}
                         >
-                            <div className="w-14 h-14 bg-white rounded-xl border border-border flex items-center justify-center shrink-0">
-                                <span className="text-lg font-bold text-gray">{item.name.charAt(0)}</span>
+                            <div className="w-14 h-14 bg-white rounded-xl border border-border flex items-center justify-center shrink-0 overflow-hidden">
+                                {item.imageUrl ? (
+                                    <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="text-lg font-bold text-gray">{item.name.charAt(0)}</span>
+                                )}
                             </div>
 
                             <div className="flex-1 flex flex-col justify-between min-w-0">
