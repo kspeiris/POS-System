@@ -25,10 +25,11 @@ export const getUsers = async (req, res) => {
 // @access  Private/Admin
 export const createUser = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, role, isActive } = req.body;
         const normalizedName = typeof name === 'string' ? name.trim() : '';
         const normalizedEmail = typeof email === 'string' ? email.toLowerCase().trim() : '';
         const normalizedRole = role ? String(role).toLowerCase() : 'cashier';
+        const normalizedIsActive = isActive !== undefined ? Boolean(isActive) : true;
 
         if (!normalizedName || !normalizedEmail || !password) {
             return res.status(400).json({ message: 'Name, email, and password are required' });
@@ -49,6 +50,7 @@ export const createUser = async (req, res) => {
             email: normalizedEmail,
             password,
             role: normalizedRole,
+            isActive: normalizedIsActive,
         });
 
         if (user) {

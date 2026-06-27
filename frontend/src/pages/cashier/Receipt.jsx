@@ -16,10 +16,10 @@ export default function Receipt() {
     useEffect(() => {
         const fetchOrder = async () => {
             try {
-                const { data } = await orderApi.getById(id);
+                const { data } = await orderApi.getReceipt(id);
                 setOrder(data);
             } catch (error) {
-                console.error('Error fetching order:', error);
+                console.error('Error fetching receipt:', error);
             } finally {
                 setIsLoading(false);
             }

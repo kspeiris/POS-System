@@ -1,8 +1,16 @@
 
 import mongoose from 'mongoose';
 import Product from '../models/Product.js';
+import Category from '../models/Category.js';
 
 const isValidObjectId = (value) => mongoose.Types.ObjectId.isValid(value);
+const resolveCategoryId = async (categoryName) => {
+    if (!categoryName) return undefined;
+    const categoryDoc = await Category.findOne({
+        name: { $regex: new RegExp(`^${categoryName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') },
+    });
+    return categoryDoc ? categoryDoc._id : undefined;
+};
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -41,7 +49,7 @@ export const getProductById = async (req, res) => {
 // @access  Private/Admin
 export const createProduct = async (req, res) => {
     try {
-        const { name, price, category, stockQty, description, imageUrl } = req.body;
+        const { name, price, category, stockQty, description, imageUrl, isAvailable } = req.body;
 
         const categoryName = typeof category === 'string' ? category.trim() : '';
         const normalizedName = typeof name === 'string' ? name.trim() : '';
@@ -62,13 +70,17 @@ export const createProduct = async (req, res) => {
             return res.status(400).json({ message: 'Stock quantity must be a whole number greater than or equal to 0' });
         }
 
+        const categoryId = await resolveCategoryId(categoryName);
+
         const product = new Product({
             name: normalizedName,
             price: parsedPrice,
             category: categoryName,
+            categoryId,
             stockQty: parsedStockQty,
             description: normalizedDescription,
             imageUrl: normalizedImageUrl,
+            isAvailable: isAvailable !== undefined ? Boolean(isAvailable) : true,
         });
 
         const createdProduct = await product.save();
@@ -114,6 +126,10 @@ export const updateProduct = async (req, res) => {
                     return res.status(400).json({ message: 'Category cannot be empty' });
                 }
                 product.category = normalizedCategory;
+                const resolvedCategoryId = await resolveCategoryId(normalizedCategory);
+                if (resolvedCategoryId) {
+                    product.categoryId = resolvedCategoryId;
+                }
             }
 
             if (stockQty !== undefined) {

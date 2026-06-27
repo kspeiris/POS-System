@@ -18,6 +18,7 @@ export default function Products() {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
     const [feedback, setFeedback] = useState('');
 
     const fetchProducts = async () => {
@@ -40,10 +41,11 @@ export default function Products() {
         fetchProducts();
     }, []);
 
-    const filteredProducts = products.filter(p =>
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.category.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredProducts = products.filter(p => {
+        const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesCategory = !selectedCategory || p.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
 
     const handleDelete = async (id) => {
         try {
@@ -91,7 +93,11 @@ export default function Products() {
                     <div className="flex items-center gap-2 text-sm text-gray">
                         <Filter size={16} />
                         <span>Filter by Category:</span>
-                        <select className="bg-transparent border-none focus:ring-0 font-medium text-dark">
+                        <select
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            className="bg-transparent border-none focus:ring-0 font-medium text-dark"
+                        >
                             <option value="">All Categories</option>
                             {categories.map((category) => (
                                 <option key={category._id} value={category.name}>
