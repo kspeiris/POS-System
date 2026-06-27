@@ -55,13 +55,13 @@ export default function POS() {
                             <p className="text-sm text-gray">Search and add products quickly.</p>
                         </div>
                         <div className="relative w-full sm:w-80">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray w-5 h-5" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray w-5 h-5 dark:text-gray-400" />
                             <input
                                 type="text"
                                 placeholder="Search products..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-border bg-white/90 shadow-sm focus:ring-2 focus:ring-primary/20 transition-all"
+                                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-border shadow-sm focus:ring-2 focus:ring-primary/20 transition-all text-dark placeholder:text-gray dark:bg-[rgba(255,255,255,0.05)] dark:border-gray-700 dark:text-gray-100 dark:placeholder:text-gray-400"
                             />
                         </div>
                     </div>
