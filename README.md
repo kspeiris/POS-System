@@ -1,5 +1,7 @@
 # 🛒 QuickPOS Lite
 
+![hero](screenshots\hero.png)
+
 QuickPOS Lite is a modern, fast, and light-weight single-branch **Point of Sale (POS)** system designed for restaurants, cafés, and retail shops. Built on the robust **MERN Stack** (MongoDB, Express, React, Node.js), it provides an efficient, clean user experience for cashiers to process bills and admins to manage inventory, users, and daily sales reports.
 
 ---
@@ -68,19 +70,18 @@ graph TD
 
 ## 📸 Screenshots
 
-Here is a preview of the user interface:
-
-| POS Billing Screen | Complete Checkout |
-| :---: | :---: |
-| ![POS Billing Screen](./UI%20images/POS%20Billing%20Screen.png) | ![Checkout-Payment Screen](./UI%20images/Checkout-Payment%20Screen.png) |
-
-| Admin Dashboard | Products Management |
-| :---: | :---: |
-| ![Admin Dashboard](./UI%20images/Admin%20Dashboard.png) | ![Products Management](./UI%20images/Products%20Management%20(Admin).png) |
-
-| Add/Edit Product | User Profile Settings |
-| :---: | :---: |
-| ![Add-Edit Product Form](./UI%20images/Add%20-Edit%20Product%20Form.png) | ![User Profile](./UI%20images/User%20Profile.png) |
+![UI](screenshots\pos1.png)
+![UI](screenshots\pos2.png)
+![UI](screenshots\pos3.png)
+![UI](screenshots\pos4.png)
+![UI](screenshots\pos5.png)
+![UI](screenshots\pos6.png)
+![UI](screenshots\pos7.png)
+![UI](screenshots\pos8.png)
+![UI](screenshots\pos9.png)
+![UI](screenshots\pos10.png)
+![UI](screenshots\pos11.png)
+![UI](screenshots\pos12.png)
 
 ---
 
