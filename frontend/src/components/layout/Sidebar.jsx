@@ -20,13 +20,13 @@ export default function Sidebar() {
     ];
 
     return (
-        <aside className="w-64 fixed left-0 top-0 h-screen flex flex-col border-r border-white/60 bg-white/80 backdrop-blur-xl shadow-[8px_0_40px_rgba(15,23,42,0.04)]">
-            <div className="p-6 border-b border-slate-100/80">
+        <aside className="w-64 fixed left-0 top-0 h-screen flex flex-col border-r border-border bg-white/80 dark:bg-white/5 backdrop-blur-xl shadow-[8px_0_40px_rgba(15,23,42,0.04)] dark:shadow-none">
+            <div className="p-6 border-b border-border">
                 <Link to="/admin" className="text-xl font-bold text-dark flex items-center gap-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-primary to-emerald-500 rounded-2xl flex items-center justify-center text-white text-sm shadow-lg shadow-primary/20">Q</div>
                     <div>
                         <div>QuickPOS</div>
-                        <div className="text-xs font-medium text-slate-500">Admin Console</div>
+                        <div className="text-xs font-medium text-gray">Admin Console</div>
                     </div>
                 </Link>
             </div>
@@ -40,19 +40,19 @@ export default function Sidebar() {
                             "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all",
                             isActive(item.path)
                                 ? "bg-primary text-white shadow-lg shadow-primary/15"
-                                : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900"
+                                : "text-gray hover:bg-light hover:text-dark"
                         )}
-                >
+                    >
                     <item.icon className="w-5 h-5" />
                     {item.label}
                 </Link>
                 ))}
             </nav>
 
-            <div className="p-4 border-t border-gray-200">
+            <div className="p-4 border-t border-border">
                 <button
                     onClick={logout}
-                    className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                    className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-semibold text-danger hover:bg-light-red rounded-xl transition-colors"
                 >
                     <LogOut className="w-5 h-5" />
                     Log Out

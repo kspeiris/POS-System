@@ -6,7 +6,7 @@ import Product from '../models/Product.js';
 // @route   POST /api/orders
 // @access  Private
 export const createOrder = async (req, res) => {
-    const { items, payment, subtotal, tax, total, discount } = req.body;
+    const { items, payment, subtotal, tax, total, discount, taxBreakdown } = req.body;
 
     if (!items || items.length === 0) {
         return res.status(400).json({ message: 'No order items' });
@@ -29,6 +29,14 @@ export const createOrder = async (req, res) => {
             }
         }
 
+        const normalizedTaxBreakdown = Array.isArray(taxBreakdown)
+            ? taxBreakdown.map((t) => ({
+                  name: typeof t.name === 'string' ? t.name : 'Tax',
+                  rate: Number(t.rate) || 0,
+                  amount: Number(t.amount) || 0,
+              }))
+            : [];
+
         // 3. Create order
         const order = new Order({
             orderNo,
@@ -39,6 +47,7 @@ export const createOrder = async (req, res) => {
             tax,
             total,
             discount,
+            taxBreakdown: normalizedTaxBreakdown,
             payment,
         });
 

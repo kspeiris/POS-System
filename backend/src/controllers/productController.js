@@ -34,7 +34,7 @@ export const getProductById = async (req, res) => {
 // @access  Private/Admin
 export const createProduct = async (req, res) => {
     try {
-        const { name, price, category, stockQty, description, imageUrl } = req.body;
+        const { name, price, category, stockQty, description, imageUrl, lowStockThreshold } = req.body;
 
         const product = new Product({
             name,
@@ -43,6 +43,7 @@ export const createProduct = async (req, res) => {
             stockQty,
             description,
             imageUrl,
+            lowStockThreshold: lowStockThreshold ?? 10,
         });
 
         const createdProduct = await product.save();
@@ -57,7 +58,7 @@ export const createProduct = async (req, res) => {
 // @access  Private/Admin
 export const updateProduct = async (req, res) => {
     try {
-        const { name, price, category, stockQty, description, imageUrl, isAvailable } = req.body;
+        const { name, price, category, stockQty, description, imageUrl, isAvailable, lowStockThreshold } = req.body;
 
         const product = await Product.findById(req.params.id);
 
@@ -69,6 +70,7 @@ export const updateProduct = async (req, res) => {
             product.description = description || product.description;
             product.imageUrl = imageUrl || product.imageUrl;
             product.isAvailable = isAvailable ?? product.isAvailable;
+            product.lowStockThreshold = lowStockThreshold ?? product.lowStockThreshold;
 
             const updatedProduct = await product.save();
             res.json(updatedProduct);
@@ -77,6 +79,20 @@ export const updateProduct = async (req, res) => {
         }
     } catch (error) {
         res.status(400).json({ message: error.message });
+    }
+};
+
+// @desc    Get low stock products
+// @route   GET /api/products/low-stock
+// @access  Private/Admin
+export const getLowStockProducts = async (req, res) => {
+    try {
+        const products = await Product.find({
+            $expr: { $lte: ['$stockQty', '$lowStockThreshold'] },
+        }).sort({ stockQty: 1 });
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 

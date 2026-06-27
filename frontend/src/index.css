@@ -15,6 +15,18 @@
     --surface: rgba(255, 255, 255, 0.84);
   }
 
+  .dark {
+    --primary: #2dd4bf;
+    --primary-hover: #14b8a6;
+    --secondary: #fbbf24;
+    --dark: #f8fafc;
+    --gray: #94a3b8;
+    --light: #0f172a;
+    --white: #1e293b;
+    --border: #334155;
+    --surface: rgba(30, 41, 59, 0.84);
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -26,6 +38,13 @@
       radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 28%),
       radial-gradient(circle at top right, rgba(245, 158, 11, 0.10), transparent 24%),
       linear-gradient(180deg, #f8fafc 0%, #f3f7fb 100%);
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(circle at top left, rgba(45, 212, 191, 0.08), transparent 28%),
+      radial-gradient(circle at top right, rgba(251, 191, 36, 0.06), transparent 24%),
+      linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
   }
 
   /* Smooth scrollbar for Chrome/Safari */
@@ -65,8 +84,16 @@
     @apply backdrop-blur-md border border-white/40 shadow-[0_20px_60px_rgba(15,23,42,0.08)];
   }
 
+  .dark .glass {
+    @apply border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.3)];
+  }
+
   .surface {
     @apply bg-white/90 backdrop-blur border border-white/60 shadow-[0_12px_40px_rgba(15,23,42,0.08)];
+  }
+
+  .dark .surface {
+    @apply bg-white/5 border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.3)];
   }
 
   .page-shell {
@@ -76,25 +103,31 @@
 
 /* Animations */
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slide-up {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
 
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+@keyframes pop-in {
+  0% { transform: scale(0.9); opacity: 0; }
+  70% { transform: scale(1.03); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .animate-fade-in {
@@ -103,4 +136,16 @@
 
 .animate-slide-up {
   animation: slide-up 0.5s ease-out forwards;
+}
+
+.animate-pop-in {
+  animation: pop-in 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s ease-out forwards;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }

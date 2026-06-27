@@ -7,6 +7,7 @@ import Badge from '../../components/ui/Badge';
 import Table, { TableRow, TableCell } from '../../components/ui/Table';
 import { orderApi } from '../../api/orderApi';
 import { userApi } from '../../api/userApi';
+import { productApi } from '../../api/productApi';
 import Loader from '../../components/ui/Loader';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -18,19 +19,22 @@ export default function Dashboard() {
     const [isLoading, setIsLoading] = useState(true);
     const [orders, setOrders] = useState([]);
     const [users, setUsers] = useState([]);
+    const [lowStockProducts, setLowStockProducts] = useState([]);
     const [stats, setStats] = useState([]);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                const [ordersRes, usersRes] = await Promise.all([
+                const [ordersRes, usersRes, lowStockRes] = await Promise.all([
                     orderApi.getAll(),
-                    userApi.getAll()
+                    userApi.getAll(),
+                    productApi.getLowStock(),
                 ]);
 
                 const allOrders = ordersRes.data;
                 setOrders(allOrders);
                 setUsers(usersRes.data);
+                setLowStockProducts(lowStockRes.data || []);
 
                 const revenue = allOrders.reduce((acc, o) => acc + o.total, 0);
                 const avgValue = allOrders.length > 0 ? revenue / allOrders.length : 0;
@@ -82,6 +86,25 @@ export default function Dashboard() {
                     </Card>
                 ))}
             </div>
+
+            {lowStockProducts.length > 0 && (
+                <Card title="Low Stock Alerts" subtitle="These products are running low">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {lowStockProducts.map((product) => (
+                            <div key={product._id} className="flex items-center justify-between p-4 rounded-2xl bg-light border border-border border-l-4 border-l-secondary">
+                                <div>
+                                    <p className="font-semibold text-dark">{product.name}</p>
+                                    <p className="text-xs text-gray">Category: {product.category}</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-lg font-bold text-danger">{product.stockQty}</p>
+                                    <p className="text-xs text-gray">in stock</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Revenue Overview Chart placeholder */}

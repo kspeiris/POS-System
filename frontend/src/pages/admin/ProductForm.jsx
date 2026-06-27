@@ -27,6 +27,7 @@ export default function ProductForm() {
         description: '',
         imageUrl: '',
         isAvailable: true,
+        lowStockThreshold: '10',
     });
 
     useEffect(() => {
@@ -45,6 +46,7 @@ export default function ProductForm() {
                         description: prodData.description || '',
                         imageUrl: prodData.imageUrl || '',
                         isAvailable: prodData.isAvailable,
+                        lowStockThreshold: prodData.lowStockThreshold?.toString() || '10',
                     });
                 } else if (catData.length > 0) {
                     setFormData(prev => ({ ...prev, category: catData[0].name }));
@@ -199,6 +201,15 @@ export default function ProductForm() {
                                 onChange={handleChange}
                                 placeholder="0"
                                 required
+                            />
+                            {fieldErrors.stockQty && <p className="mt-1 text-sm text-danger">{fieldErrors.stockQty}</p>}
+                            <Input
+                                label="Low Stock Alert Threshold"
+                                name="lowStockThreshold"
+                                type="number"
+                                value={formData.lowStockThreshold}
+                                onChange={handleChange}
+                                placeholder="10"
                             />
                             <div className="md:col-span-2 flex flex-col gap-1.5">
                                 <label className="text-sm font-medium text-gray-700">Description</label>
