@@ -1,14 +1,36 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import api from '../api/axios';
 
 const CartContext = createContext(null);
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
-    const TAX_RATE = 0.10; // 10% tax for mockup
+    const [taxRate, setTaxRate] = useState(0);
+    const [taxRules, setTaxRules] = useState([]);
+
+    useEffect(() => {
+        const fetchTaxRules = async () => {
+            try {
+                const { data } = await api.get('/tax-rules/active');
+                const totalRate = data.reduce((sum, rule) => sum + Number(rule.rate || 0), 0);
+                setTaxRate(totalRate / 100);
+                setTaxRules(data || []);
+            } catch (error) {
+                setTaxRate(0);
+                setTaxRules([]);
+            }
+        };
+        fetchTaxRules();
+    }, []);
 
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const tax = subtotal * TAX_RATE;
+    const taxBreakdown = taxRules.map(rule => ({
+        name: rule.name,
+        rate: rule.rate,
+        amount: Number((subtotal * (rule.rate / 100)).toFixed(2)),
+    }));
+    const tax = taxBreakdown.reduce((sum, t) => sum + t.amount, 0);
     const total = subtotal + tax;
 
     const addToCart = (product) => {
@@ -53,7 +75,10 @@ export const CartProvider = ({ children }) => {
             clearCart,
             subtotal,
             tax,
-            total
+            total,
+            taxRate,
+            taxRules,
+            taxBreakdown,
         }}>
             {children}
         </CartContext.Provider>

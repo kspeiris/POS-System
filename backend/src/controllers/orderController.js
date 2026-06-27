@@ -9,7 +9,7 @@ const isValidObjectId = (value) => mongoose.Types.ObjectId.isValid(value);
 // @route   POST /api/orders
 // @access  Private
 export const createOrder = async (req, res) => {
-    const { items, payment, subtotal, tax, total, discount } = req.body;
+    const { items, payment, subtotal, tax, total, discount, taxBreakdown } = req.body;
 
     if (!Array.isArray(items) || items.length === 0) {
         return res.status(400).json({ message: 'No order items' });
@@ -79,6 +79,14 @@ export const createOrder = async (req, res) => {
             }
 
             // 3. Create order
+            const normalizedTaxBreakdown = Array.isArray(taxBreakdown)
+                ? taxBreakdown.map((t) => ({
+                    name: typeof t.name === 'string' ? t.name : 'Tax',
+                    rate: Number(t.rate) || 0,
+                    amount: Number(t.amount) || 0,
+                }))
+                : [];
+
             const order = new Order({
                 orderNo,
                 cashier: req.user._id,
@@ -88,6 +96,7 @@ export const createOrder = async (req, res) => {
                 tax: Number(tax) || 0,
                 total: Number(total) || 0,
                 discount: Number(discount) || 0,
+                taxBreakdown: normalizedTaxBreakdown,
                 payment: {
                     method: payment.method,
                     amountPaid: Number(payment.amountPaid) || 0,
@@ -131,6 +140,98 @@ export const getOrderById = async (req, res) => {
         } else {
             res.status(404).json({ message: 'Order not found' });
         }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Void an order (restore stock)
+// @route   PATCH /api/orders/:id/void
+// @access  Private/Admin
+export const voidOrder = async (req, res) => {
+    try {
+        if (!isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: 'Invalid order id' });
+        }
+
+        const { reason } = req.body;
+
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        if (order.status === 'voided') {
+            return res.status(400).json({ message: 'Order is already voided' });
+        }
+
+        if (order.status === 'refunded') {
+            return res.status(400).json({ message: 'Cannot void a refunded order' });
+        }
+
+        // Restore stock
+        for (const item of order.items) {
+            if (isValidObjectId(item.product)) {
+                await Product.findByIdAndUpdate(item.product, {
+                    $inc: { stockQty: item.qty },
+                });
+            }
+        }
+
+        order.status = 'voided';
+        order.voidedAt = new Date();
+        order.voidedBy = req.user._id;
+        order.voidReason = typeof reason === 'string' ? reason : '';
+        await order.save();
+
+        res.json({ message: 'Order voided successfully', order });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Process refund for an order
+// @route   PATCH /api/orders/:id/refund
+// @access  Private/Admin
+export const refundOrder = async (req, res) => {
+    try {
+        if (!isValidObjectId(req.params.id)) {
+            return res.status(400).json({ message: 'Invalid order id' });
+        }
+
+        const { amount, reason } = req.body;
+        const refundAmount = Number(amount);
+
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        if (order.status === 'voided') {
+            return res.status(400).json({ message: 'Cannot refund a voided order' });
+        }
+
+        if (order.status === 'refunded') {
+            return res.status(400).json({ message: 'Order is already refunded' });
+        }
+
+        if (!Number.isFinite(refundAmount) || refundAmount <= 0) {
+            return res.status(400).json({ message: 'Valid refund amount is required' });
+        }
+
+        const remainingRefundable = Number(order.total) - Number(order.refundAmount || 0);
+        if (refundAmount > remainingRefundable) {
+            return res.status(400).json({ message: `Refund amount cannot exceed remaining refundable amount of ${remainingRefundable}` });
+        }
+
+        order.status = 'refunded';
+        order.refundedAt = new Date();
+        order.refundedBy = req.user._id;
+        order.refundAmount = (Number(order.refundAmount || 0) + refundAmount);
+        order.refundReason = typeof reason === 'string' ? reason : '';
+        await order.save();
+
+        res.json({ message: 'Refund processed successfully', order });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

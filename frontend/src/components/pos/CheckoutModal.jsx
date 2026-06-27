@@ -4,16 +4,29 @@ import { CreditCard, Banknote, QrCode, ArrowRight } from 'lucide-react';
 import Modal from '../ui/Modal';
 import Button from '../ui/Button';
 import { formatLKR } from '../../utils/money';
+import clsx from 'clsx';
 
 export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
     const [paymentMethod, setPaymentMethod] = useState('cash');
     const [amountReceived, setAmountReceived] = useState(total.toString());
     const [isProcessing, setIsProcessing] = useState(false);
+    const [amountError, setAmountError] = useState('');
 
     const change = parseFloat(amountReceived || 0) - total;
 
+    const validateAmount = () => {
+        const parsed = parseFloat(amountReceived);
+        if (Number.isNaN(parsed) || parsed < 0) {
+            setAmountError('Please enter a valid amount');
+            return false;
+        }
+        setAmountError('');
+        return true;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!validateAmount()) return;
         setIsProcessing(true);
         Promise.resolve(
             onConfirm({
@@ -70,18 +83,27 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                     <div className="space-y-4 animate-in slide-in-from-top-2 duration-300">
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-dark-2">Amount Received</label>
-                            <div className="relative">
+                        <div className="relative">
                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray font-bold">LKR</span>
                                 <input
                                     type="number"
                                     step="0.01"
                                     value={amountReceived}
-                                    onChange={(e) => setAmountReceived(e.target.value)}
-                                    className="w-full bg-light border-none rounded-2xl py-4 pl-8 pr-4 text-2xl font-bold focus:ring-2 focus:ring-primary transition-all"
+                                    onChange={(e) => {
+                                        setAmountReceived(e.target.value);
+                                        if (amountError) setAmountError('');
+                                    }}
+                                    className={clsx(
+                                        "w-full bg-light border-none rounded-2xl py-4 pl-8 pr-4 text-2xl font-bold focus:ring-2 focus:ring-primary transition-all",
+                                        amountError ? "border-2 border-danger" : ""
+                                    )}
                                     placeholder="0.00"
                                     autoFocus
                                 />
                             </div>
+                            {amountError && (
+                                <p className="text-sm text-danger font-medium">{amountError}</p>
+                            )}
                         </div>
 
                         {/* Quick Cash Buttons */}
@@ -119,7 +141,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm }) {
                         type="submit"
                         className="flex-[2] py-4 rounded-xl text-lg font-bold"
                         isLoading={isProcessing}
-                        disabled={paymentMethod === 'cash' && change < 0}
+                        disabled={!!amountError || (paymentMethod === 'cash' && change < 0)}
                     >
                         Complete Order
                         <ArrowRight className="ml-2" size={20} />

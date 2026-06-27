@@ -1,12 +1,13 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ProductGrid from '../../components/pos/ProductGrid';
 import CartPanel from '../../components/pos/CartPanel';
 import { useCart } from '../../context/CartContext';
-import { Search } from 'lucide-react';
+import { Search, Barcode } from 'lucide-react';
 import { productApi } from '../../api/productApi';
 import { categoryApi } from '../../api/categoryApi';
 import Loader from '../../components/ui/Loader';
+import Button from '../../components/ui/Button';
 
 export default function POS() {
     const { addToCart } = useCart();
@@ -14,7 +15,10 @@ export default function POS() {
     const [categories, setCategories] = useState(['All']);
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
+    const [barcodeInput, setBarcodeInput] = useState('');
+    const [barcodeError, setBarcodeError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const barcodeRef = useRef(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -40,6 +44,31 @@ export default function POS() {
         return matchesCategory && matchesSearch;
     });
 
+    const handleBarcodeSubmit = async (e) => {
+        e.preventDefault();
+        const code = barcodeInput.trim();
+        if (!code) return;
+
+        try {
+            const { data } = await productApi.getByBarcode(code);
+            if (data) {
+                addToCart(data);
+                setBarcodeInput('');
+                setBarcodeError('');
+                if (barcodeRef.current) {
+                    barcodeRef.current.value = '';
+                }
+            }
+        } catch (error) {
+            if (error.response?.status === 404) {
+                setBarcodeError('Product not found for this barcode');
+            } else {
+                setBarcodeError('Error scanning barcode');
+            }
+            setTimeout(() => setBarcodeError(''), 3000);
+        }
+    };
+
     if (isLoading) return <Loader fullPage />;
 
     return (
@@ -52,7 +81,7 @@ export default function POS() {
                         <div>
                             <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Checkout</p>
                             <h1 className="text-3xl font-bold text-dark mt-1">Menu</h1>
-                            <p className="text-sm text-gray">Search and add products quickly.</p>
+                            <p className="text-sm text-gray">Scan barcodes or search products to add to cart.</p>
                         </div>
                         <div className="relative w-full sm:w-80">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray w-5 h-5" />
@@ -65,6 +94,28 @@ export default function POS() {
                             />
                         </div>
                     </div>
+
+                    {/* Barcode Scanner */}
+                    <form onSubmit={handleBarcodeSubmit} className="flex items-center gap-3">
+                        <div className="relative flex-1 max-w-md">
+                            <Barcode className="absolute left-3 top-1/2 -translate-y-1/2 text-gray w-5 h-5" />
+                            <input
+                                ref={barcodeRef}
+                                type="text"
+                                placeholder="Scan or type barcode here..."
+                                value={barcodeInput}
+                                onChange={(e) => setBarcodeInput(e.target.value)}
+                                onFocus={() => setBarcodeError('')}
+                                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-border bg-white/90 shadow-card focus:ring-2 focus:ring-primary/20 transition-all"
+                            />
+                        </div>
+                        <Button type="submit" variant="secondary">Scan</Button>
+                    </form>
+                    {barcodeError && (
+                        <div className="rounded-xl border border-light-red bg-light-red px-4 py-2 text-sm text-danger">
+                            {barcodeError}
+                        </div>
+                    )}
 
                     {/* Categories */}
                     <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">

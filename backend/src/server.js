@@ -11,6 +11,7 @@ import categoryRoutes from './routes/categoryRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import taxRoutes from './routes/taxRoutes.js';
 
 // Load env vars
 dotenv.config();
@@ -43,6 +44,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/tax-rules', taxRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
