@@ -38,7 +38,7 @@ export default function ReportsDaily() {
         { label: 'Total Sales', value: formatLKR(reportData.totalSales), icon: TrendingUp, color: 'text-primary bg-primary/10' },
         { label: 'Total Orders', value: reportData.totalOrders.toLocaleString(), icon: ShoppingBag, color: 'text-success bg-light-green' },
         { label: 'Avg Order', value: formatLKR(reportData.avgOrderValue ?? (reportData.totalOrders ? reportData.totalSales / reportData.totalOrders : 0)), icon: CreditCard, color: 'text-primary bg-light-blue' },
-        { label: 'Canceled', value: '0', icon: RotateCcw, color: 'text-danger bg-light-red' },
+        { label: 'Canceled', value: (reportData.cancelledOrders ?? 0).toLocaleString(), icon: RotateCcw, color: 'text-danger bg-light-red' },
     ] : [];
 
     if (isLoading) return <Loader fullPage />;
@@ -102,7 +102,7 @@ export default function ReportsDaily() {
                                 <div className="h-2 w-full bg-light rounded-full overflow-hidden">
                                     <div
                                         className="h-full bg-primary"
-                                        style={{ width: `${(item.sales / reportData.totalSales * 100) || 0}%` }}
+                                        style={{ width: `${reportData.totalSales ? (item.sales / reportData.totalSales) * 100 : 0}%` }}
                                     />
                                 </div>
                             </div>

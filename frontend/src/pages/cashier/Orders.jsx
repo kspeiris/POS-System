@@ -34,7 +34,7 @@ export default function Orders() {
     }, []);
 
     const filteredOrders = orders.filter(order =>
-        order.orderNo.toLowerCase().includes(searchQuery.toLowerCase())
+        (order.orderNo || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     if (isLoading) return <Loader fullPage />;
