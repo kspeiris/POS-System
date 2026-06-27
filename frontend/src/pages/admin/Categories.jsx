@@ -17,6 +17,7 @@ export default function Categories() {
     const [currentCategory, setCurrentCategory] = useState(null);
     const [formData, setFormData] = useState({ name: '', description: '' });
     const [banner, setBanner] = useState('');
+    const [fieldError, setFieldError] = useState('');
 
     const fetchCategories = async () => {
         try {
@@ -37,12 +38,19 @@ export default function Categories() {
     const openModal = (cat = null) => {
         setCurrentCategory(cat);
         setFormData(cat ? { name: cat.name, description: cat.description || '' } : { name: '', description: '' });
+        setFieldError('');
         setIsModalOpen(true);
     };
 
     const handleSave = async (e) => {
         e.preventDefault();
         try {
+            if (!formData.name.trim()) {
+                setFieldError('Category name is required');
+                return;
+            }
+
+            setFieldError('');
             if (currentCategory) {
                 await categoryApi.update(currentCategory._id, formData);
                 setBanner('Category updated successfully.');
@@ -133,6 +141,7 @@ export default function Categories() {
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         required
                     />
+                    {fieldError && <p className="text-sm text-danger">{fieldError}</p>}
                     <div className="flex flex-col gap-1.5">
                         <label className="text-sm font-medium text-dark-2">Description</label>
                         <textarea

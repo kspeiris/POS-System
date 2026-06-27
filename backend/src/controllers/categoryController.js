@@ -23,6 +23,7 @@ export const createCategory = async (req, res) => {
     try {
         const { name, description } = req.body;
         const normalizedName = typeof name === 'string' ? name.trim() : '';
+        const normalizedDescription = typeof description === 'string' ? description.trim() : '';
 
         if (!normalizedName) {
             return res.status(400).json({ message: 'Category name is required' });
@@ -35,7 +36,7 @@ export const createCategory = async (req, res) => {
             return res.status(400).json({ message: 'Category already exists' });
         }
 
-        const category = await Category.create({ name: normalizedName, description });
+        const category = await Category.create({ name: normalizedName, description: normalizedDescription });
         res.status(201).json(category);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -74,7 +75,7 @@ export const updateCategory = async (req, res) => {
         }
 
         if (description !== undefined) {
-            category.description = description;
+            category.description = typeof description === 'string' ? description.trim() : '';
         }
 
         const updatedCategory = await category.save();

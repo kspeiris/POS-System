@@ -10,19 +10,25 @@ import Badge from '../../components/ui/Badge';
 import Loader from '../../components/ui/Loader';
 
 import { productApi } from '../../api/productApi';
+import { categoryApi } from '../../api/categoryApi';
 
 export default function Products() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [feedback, setFeedback] = useState('');
 
     const fetchProducts = async () => {
         try {
             setIsLoading(true);
-            const { data } = await productApi.getAll();
-            setProducts(data);
+            const [productsRes, categoriesRes] = await Promise.all([
+                productApi.getAll(),
+                categoryApi.getAll(),
+            ]);
+            setProducts(productsRes.data || []);
+            setCategories(categoriesRes.data || []);
         } catch (error) {
             console.error('Error fetching products:', error);
         } finally {
@@ -86,10 +92,12 @@ export default function Products() {
                         <Filter size={16} />
                         <span>Filter by Category:</span>
                         <select className="bg-transparent border-none focus:ring-0 font-medium text-dark">
-                            <option>All Categories</option>
-                            <option>Burgers</option>
-                            <option>Sides</option>
-                            <option>Beverages</option>
+                            <option value="">All Categories</option>
+                            {categories.map((category) => (
+                                <option key={category._id} value={category.name}>
+                                    {category.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
                 </div>

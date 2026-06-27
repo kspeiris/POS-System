@@ -45,18 +45,30 @@ export const createProduct = async (req, res) => {
 
         const categoryName = typeof category === 'string' ? category.trim() : '';
         const normalizedName = typeof name === 'string' ? name.trim() : '';
+        const normalizedDescription = typeof description === 'string' ? description.trim() : '';
+        const normalizedImageUrl = typeof imageUrl === 'string' ? imageUrl.trim() : '';
+        const parsedPrice = Number(price);
+        const parsedStockQty = Number(stockQty);
 
         if (!normalizedName || !categoryName) {
             return res.status(400).json({ message: 'Name and category are required' });
         }
 
+        if (!Number.isFinite(parsedPrice) || parsedPrice < 0) {
+            return res.status(400).json({ message: 'Price must be a valid non-negative number' });
+        }
+
+        if (!Number.isFinite(parsedStockQty) || parsedStockQty < 0 || !Number.isInteger(parsedStockQty)) {
+            return res.status(400).json({ message: 'Stock quantity must be a whole number greater than or equal to 0' });
+        }
+
         const product = new Product({
             name: normalizedName,
-            price,
+            price: parsedPrice,
             category: categoryName,
-            stockQty,
-            description,
-            imageUrl,
+            stockQty: parsedStockQty,
+            description: normalizedDescription,
+            imageUrl: normalizedImageUrl,
         });
 
         const createdProduct = await product.save();
@@ -80,10 +92,38 @@ export const updateProduct = async (req, res) => {
         const product = await Product.findById(req.params.id);
 
         if (product) {
-            product.name = name?.trim() || product.name;
-            product.price = price ?? product.price;
-            product.category = category?.trim() || product.category;
-            product.stockQty = stockQty ?? product.stockQty;
+            if (name !== undefined) {
+                const normalizedName = typeof name === 'string' ? name.trim() : '';
+                if (!normalizedName) {
+                    return res.status(400).json({ message: 'Product name cannot be empty' });
+                }
+                product.name = normalizedName;
+            }
+
+            if (price !== undefined) {
+                const parsedPrice = Number(price);
+                if (!Number.isFinite(parsedPrice) || parsedPrice < 0) {
+                    return res.status(400).json({ message: 'Price must be a valid non-negative number' });
+                }
+                product.price = parsedPrice;
+            }
+
+            if (category !== undefined) {
+                const normalizedCategory = typeof category === 'string' ? category.trim() : '';
+                if (!normalizedCategory) {
+                    return res.status(400).json({ message: 'Category cannot be empty' });
+                }
+                product.category = normalizedCategory;
+            }
+
+            if (stockQty !== undefined) {
+                const parsedStockQty = Number(stockQty);
+                if (!Number.isFinite(parsedStockQty) || parsedStockQty < 0 || !Number.isInteger(parsedStockQty)) {
+                    return res.status(400).json({ message: 'Stock quantity must be a whole number greater than or equal to 0' });
+                }
+                product.stockQty = parsedStockQty;
+            }
+
             product.description = description ?? product.description;
             product.imageUrl = imageUrl ?? product.imageUrl;
             product.isAvailable = isAvailable ?? product.isAvailable;
