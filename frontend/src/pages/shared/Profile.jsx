@@ -24,29 +24,46 @@ export default function Profile() {
     });
 
     const handleSaveProfile = () => {
-        setFeedback('');
-        updateProfile({
-            name: formState.name.trim(),
-            email: formState.email.trim().toLowerCase(),
-        });
-        setIsEditing(false);
-        setFeedback('Profile updated.');
+        (async () => {
+            try {
+                setFeedback('');
+                await updateProfile({
+                    name: formState.name.trim(),
+                    email: formState.email.trim().toLowerCase(),
+                });
+                setIsEditing(false);
+                setFeedback('Profile updated.');
+            } catch (error) {
+                setFeedback(error.message);
+            }
+        })();
     };
 
     const handlePasswordSave = () => {
-        if (!passwordState.newPassword || passwordState.newPassword.length < 6) {
-            setFeedback('New password must be at least 6 characters.');
-            return;
-        }
+        (async () => {
+            if (!passwordState.newPassword || passwordState.newPassword.length < 6) {
+                setFeedback('New password must be at least 6 characters.');
+                return;
+            }
 
-        if (passwordState.newPassword !== passwordState.confirmPassword) {
-            setFeedback('Passwords do not match.');
-            return;
-        }
+            if (passwordState.newPassword !== passwordState.confirmPassword) {
+                setFeedback('Passwords do not match.');
+                return;
+            }
 
-        setPasswordState({ currentPassword: '', newPassword: '', confirmPassword: '' });
-        setIsPasswordOpen(false);
-        setFeedback('Password changes are not connected to the backend yet.');
+            try {
+                setFeedback('');
+                await updateProfile({
+                    currentPassword: passwordState.currentPassword,
+                    newPassword: passwordState.newPassword,
+                });
+                setPasswordState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                setIsPasswordOpen(false);
+                setFeedback('Password updated.');
+            } catch (error) {
+                setFeedback(error.message);
+            }
+        })();
     };
 
     return (

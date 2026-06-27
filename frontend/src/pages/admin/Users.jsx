@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { Plus, Edit2, Trash2, Mail, Shield, User } from 'lucide-react';
@@ -39,13 +38,14 @@ export default function Users() {
 
     const openModal = (user = null) => {
         setCurrentUser(user);
-        setFormData(user ? { ...user, password: '' } : { name: '', email: '', role: 'cashier', password: '' });
+        setFormData(user ? { ...user, password: '' } : { name: '', email: '', role: 'cashier', password: '', isActive: true });
         setIsModalOpen(true);
     };
 
     const handleSave = async (e) => {
         e.preventDefault();
         try {
+            setFeedback('');
             if (currentUser) {
                 await userApi.update(currentUser._id, formData);
             } else {
@@ -55,6 +55,18 @@ export default function Users() {
             setIsModalOpen(false);
         } catch (error) {
             setFeedback(error.response?.data?.message || 'Failed to save user');
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (window.confirm('Are you sure you want to delete this staff member?')) {
+            try {
+                setFeedback('');
+                await userApi.delete(id);
+                fetchUsers();
+            } catch (error) {
+                setFeedback(error.response?.data?.message || 'Failed to delete user');
+            }
         }
     };
 
@@ -111,6 +123,12 @@ export default function Users() {
                                     >
                                         <Edit2 size={18} />
                                     </button>
+                                    <button
+                                        className="p-2 text-gray hover:text-danger transition-colors"
+                                        onClick={() => handleDelete(user._id)}
+                                    >
+                                        <Trash2 size={18} />
+                                    </button>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -149,15 +167,26 @@ export default function Users() {
                             ))}
                         </select>
                     </div>
-                    {!currentUser && (
-                        <Input
-                            label="Password"
-                            type="password"
-                            value={formData.password}
-                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            required
-                        />
+                    {currentUser && (
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-sm font-medium text-dark-2">Status</label>
+                            <select
+                                value={formData.isActive ? 'active' : 'inactive'}
+                                onChange={(e) => setFormData({ ...formData, isActive: e.target.value === 'active' })}
+                                className="w-full rounded-lg border-border bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                            >
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
                     )}
+                    <Input
+                        label={currentUser ? "New Password (leave blank to keep current)" : "Password"}
+                        type="password"
+                        value={formData.password || ''}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        required={!currentUser}
+                    />
                     <div className="pt-4 flex gap-3">
                         <Button variant="ghost" className="flex-1" type="button" onClick={() => setIsModalOpen(false)}>
                             Cancel
