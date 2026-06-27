@@ -13,6 +13,11 @@ const productSchema = mongoose.Schema(
             unique: true,
             sparse: true,
         },
+        barcode: {
+            type: String,
+            unique: true,
+            sparse: true,
+        },
         category: {
             type: String,
             required: [true, 'Please add a category'],

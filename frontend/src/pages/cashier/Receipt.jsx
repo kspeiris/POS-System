@@ -109,10 +109,18 @@ export default function Receipt() {
                         <span>Subtotal:</span>
                         <span>{formatLKR(displayOrder.subtotal)}</span>
                     </div>
-                    <div className="flex justify-between text-sm">
-                        <span>Tax (10%):</span>
-                        <span>{formatLKR(displayOrder.tax)}</span>
-                    </div>
+                    {order.taxBreakdown && order.taxBreakdown.length > 0
+                        ? order.taxBreakdown.map((t, idx) => (
+                            <div key={idx} className="flex justify-between text-sm">
+                                <span>Tax ({t.name} {t.rate}%):</span>
+                                <span>{formatLKR(t.amount)}</span>
+                            </div>
+                        ))
+                        : <div className="flex justify-between text-sm">
+                            <span>Tax:</span>
+                            <span>{formatLKR(displayOrder.tax)}</span>
+                        </div>
+                    }
                     <div className="flex justify-between text-lg font-bold text-dark pt-2">
                         <span>TOTAL:</span>
                         <span>{formatLKR(displayOrder.total)}</span>

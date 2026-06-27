@@ -7,4 +7,5 @@ export const productApi = {
     create: (data) => api.post('/products', data),
     update: (id, data) => api.put(`/products/${id}`, data),
     delete: (id) => api.delete(`/products/${id}`),
+    getByBarcode: (code) => api.get(`/products/barcode/${encodeURIComponent(code)}`),
 };

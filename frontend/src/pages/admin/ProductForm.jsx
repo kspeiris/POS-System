@@ -31,6 +31,8 @@ export default function ProductForm() {
         description: '',
         imageUrl: '',
         isAvailable: true,
+        barcode: '',
+        sku: '',
     });
 
     useEffect(() => {
@@ -49,6 +51,8 @@ export default function ProductForm() {
                         description: prodData.description || '',
                         imageUrl: prodData.imageUrl || '',
                         isAvailable: prodData.isAvailable,
+                        barcode: prodData.barcode || '',
+                        sku: prodData.sku || '',
                     });
                     setImagePreview(prodData.imageUrl || '');
                 } else if (catData.length > 0) {
@@ -214,6 +218,20 @@ export default function ProductForm() {
                                     placeholder="https://images.unsplash.com/..."
                                 />
                             </div>
+                            <Input
+                                label="Barcode"
+                                name="barcode"
+                                value={formData.barcode}
+                                onChange={handleChange}
+                                placeholder="Scan or enter barcode"
+                            />
+                            <Input
+                                label="SKU"
+                                name="sku"
+                                value={formData.sku}
+                                onChange={handleChange}
+                                placeholder="e.g. BURG-001"
+                            />
                             <Input
                                 label="Price ($)"
                                 name="price"

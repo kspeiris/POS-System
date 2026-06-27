@@ -9,7 +9,7 @@ import Button from '../ui/Button';
 import { formatLKR } from '../../utils/money';
 
 export default function CartPanel() {
-    const { cart, removeFromCart, updateQuantity, subtotal, tax, total, clearCart } = useCart();
+    const { cart, removeFromCart, updateQuantity, subtotal, tax, total, clearCart, taxBreakdown } = useCart();
     const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
     const [feedback, setFeedback] = useState('');
     const navigate = useNavigate();
@@ -37,6 +37,7 @@ export default function CartPanel() {
                 tax,
                 total,
                 discount: 0,
+                taxBreakdown,
                 payment: {
                     method: orderData.paymentMethod,
                     amountPaid: orderData.amountReceived,
@@ -134,10 +135,12 @@ export default function CartPanel() {
                         <span>Subtotal</span>
                         <span>{formatLKR(subtotal)}</span>
                     </div>
-                    <div className="flex justify-between text-gray text-sm">
-                        <span>Tax (10%)</span>
-                        <span>{formatLKR(tax)}</span>
-                    </div>
+                    {taxBreakdown.map((t, idx) => (
+                        <div key={t.name + idx} className="flex justify-between text-gray text-sm">
+                            <span>Tax ({t.name} {t.rate}%)</span>
+                            <span>{formatLKR(t.amount)}</span>
+                        </div>
+                    ))}
                     <div className="flex justify-between text-dark font-bold text-lg pt-2 border-t border-dashed border-border">
                         <span>Total</span>
                         <span className="text-primary">{formatLKR(total)}</span>
