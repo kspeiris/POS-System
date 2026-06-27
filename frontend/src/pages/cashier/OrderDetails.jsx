@@ -74,7 +74,18 @@ export default function OrderDetails() {
                         <Table headers={['Item', 'Price', 'Qty', 'Total']}>
                             {order.items.map((item, idx) => (
                                 <TableRow key={idx}>
-                                    <TableCell className="font-medium text-dark">{item.name}</TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-lg bg-light border border-border flex items-center justify-center overflow-hidden shrink-0">
+                                                {item.imageUrl ? (
+                                                    <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <span className="text-xs font-bold text-gray">{item.name.charAt(0)}</span>
+                                                )}
+                                            </div>
+                                            <span className="font-medium text-dark">{item.name}</span>
+                                        </div>
+                                    </TableCell>
                                     <TableCell>{formatLKR(item.price)}</TableCell>
                                     <TableCell>{item.qty}</TableCell>
                                     <TableCell className="font-bold">{formatLKR(item.total)}</TableCell>

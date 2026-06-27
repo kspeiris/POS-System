@@ -11,6 +11,9 @@ const api = axios.create({
 // Request interceptor for attaching token
 api.interceptors.request.use(
     (config) => {
+        if (config.data instanceof FormData) {
+            delete config.headers['Content-Type'];
+        }
         const user = localStorage.getItem('user');
         if (user) {
             const { token } = JSON.parse(user);

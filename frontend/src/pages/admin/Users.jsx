@@ -79,8 +79,12 @@ export default function Users() {
                         <TableRow key={user._id}>
                             <TableCell>
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                                        <User size={18} />
+                                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary overflow-hidden">
+                                        {user.profilePic ? (
+                                            <img src={user.profilePic} alt={user.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <User size={18} />
+                                        )}
                                     </div>
                                     <span className="font-medium text-dark">{user.name}</span>
                                 </div>

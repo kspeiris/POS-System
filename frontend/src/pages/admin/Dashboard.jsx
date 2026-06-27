@@ -93,9 +93,18 @@ export default function Dashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {lowStockProducts.map((product) => (
                             <div key={product._id} className="flex items-center justify-between p-4 rounded-2xl bg-light border border-border border-l-4 border-l-secondary">
-                                <div>
-                                    <p className="font-semibold text-dark">{product.name}</p>
-                                    <p className="text-xs text-gray">Category: {product.category}</p>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 rounded-xl bg-white border border-border flex items-center justify-center overflow-hidden shrink-0">
+                                        {product.imageUrl ? (
+                                            <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <span className="text-sm font-bold text-gray">{product.name.charAt(0)}</span>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold text-dark">{product.name}</p>
+                                        <p className="text-xs text-gray">Category: {product.category}</p>
+                                    </div>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-lg font-bold text-danger">{product.stockQty}</p>

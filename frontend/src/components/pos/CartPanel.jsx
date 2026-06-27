@@ -14,9 +14,14 @@ export default function CartPanel() {
     const [isProcessing, setIsProcessing] = useState(false);
     const [feedback, setFeedback] = useState('');
     const [justAdded, setJustAdded] = useState(null);
+    const [brokenImages, setBrokenImages] = useState({});
     const navigate = useNavigate();
 
     const getItemId = (item) => item._id || item.id;
+
+    const handleImageError = (id) => {
+        setBrokenImages(prev => ({ ...prev, [id]: true }));
+    };
 
     useEffect(() => {
         if (justAdded) {
@@ -38,7 +43,8 @@ export default function CartPanel() {
                 name: item.name,
                 qty: item.quantity,
                 price: item.price,
-                total: item.price * item.quantity
+                total: item.price * item.quantity,
+                imageUrl: item.imageUrl
             }));
 
             const { data } = await orderApi.create({
@@ -103,8 +109,13 @@ export default function CartPanel() {
                             }`}
                         >
                             <div className="w-14 h-14 bg-white rounded-xl border border-border flex items-center justify-center shrink-0 overflow-hidden">
-                                {item.imageUrl ? (
-                                    <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                                {item.imageUrl && !brokenImages[getItemId(item)] ? (
+                                    <img
+                                        src={item.imageUrl}
+                                        alt={item.name}
+                                        className="w-full h-full object-cover"
+                                        onError={() => handleImageError(getItemId(item))}
+                                    />
                                 ) : (
                                     <span className="text-lg font-bold text-gray">{item.name.charAt(0)}</span>
                                 )}

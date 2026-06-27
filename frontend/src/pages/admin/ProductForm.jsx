@@ -16,6 +16,8 @@ export default function ProductForm() {
     const isEdit = !!id;
 
     const [fieldErrors, setFieldErrors] = useState({});
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState('');
 
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
@@ -70,6 +72,21 @@ export default function ProductForm() {
         }));
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            setPreviewUrl(URL.createObjectURL(file));
+        }
+    };
+
+    const removeImage = () => {
+        setSelectedFile(null);
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        setPreviewUrl('');
+        setFormData(prev => ({ ...prev, imageUrl: '' }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSaving(true);
@@ -81,9 +98,16 @@ export default function ProductForm() {
             };
 
             if (isEdit) {
+                if (selectedFile) {
+                    const uploadRes = await productApi.uploadImage(id, selectedFile);
+                    payload.imageUrl = uploadRes.data.imageUrl;
+                }
                 await productApi.update(id, payload);
             } else {
-                await productApi.create(payload);
+                const { data: createdProduct } = await productApi.create(payload);
+                if (selectedFile) {
+                    await productApi.uploadImage(createdProduct._id, selectedFile);
+                }
             }
             navigate('/admin/products');
         } catch (error) {
@@ -117,11 +141,30 @@ export default function ProductForm() {
                 <div className="md:col-span-1 space-y-6">
                     <Card title="Product Image" subtitle="Use a clean image that is easy to scan">
                         <div className="flex flex-col items-center gap-4">
-<div className="w-full aspect-square rounded-3xl bg-light border-2 border-dashed border-border flex flex-col items-center justify-center text-gray group hover:border-primary hover:bg-primary/5 transition-all cursor-pointer">
+                            {previewUrl || (formData.imageUrl && !previewUrl) ? (
+                                <div className="relative w-full aspect-square rounded-3xl overflow-hidden bg-light">
+                                    <img src={previewUrl || formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                                    <button
+                                        type="button"
+                                        onClick={removeImage}
+                                        className="absolute top-2 right-2 p-1.5 bg-white/90 rounded-full shadow-md text-gray hover:text-danger transition-all"
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                </div>
+                            ) : (
+                                <label className="w-full aspect-square rounded-3xl bg-light border-2 border-dashed border-border flex flex-col items-center justify-center text-gray group hover:border-primary hover:bg-primary/5 transition-all cursor-pointer">
                                     <Upload size={32} className="mb-2 group-hover:text-primary transition-colors" />
                                     <span className="text-xs font-medium group-hover:text-primary transition-colors">Click to Upload</span>
                                     <span className="text-[10px]">PNG, JPG up to 5MB</span>
-                                </div>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={handleImageChange}
+                                    />
+                                </label>
+                            )}
 <p className="text-xs text-center text-gray">
                                         Recommend style: Clear image with simple background.
                                     </p>

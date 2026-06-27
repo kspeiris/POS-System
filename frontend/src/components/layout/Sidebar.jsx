@@ -6,7 +6,7 @@ import clsx from 'clsx';
 
 export default function Sidebar() {
     const location = useLocation();
-    const { logout } = useAuth();
+    const { user, logout } = useAuth();
     const isActive = (path) => location.pathname === path;
 
     const navItems = [
@@ -50,13 +50,25 @@ export default function Sidebar() {
             </nav>
 
             <div className="p-4 border-t border-border">
-                <button
-                    onClick={logout}
-                    className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-semibold text-danger hover:bg-light-red rounded-xl transition-colors"
-                >
-                    <LogOut className="w-5 h-5" />
-                    Log Out
-                </button>
+                <div className="flex items-center gap-3 px-3 py-2.5">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary overflow-hidden">
+                        {user?.profilePic ? (
+                            <img src={user.profilePic} alt={user.name} className="w-full h-full object-cover" />
+                        ) : (
+                            <User size={16} />
+                        )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-dark truncate">{user?.name}</p>
+                        <p className="text-[10px] text-gray truncate capitalize">{user?.role}</p>
+                    </div>
+                    <button
+                        onClick={logout}
+                        className="text-gray hover:text-danger transition-colors p-1"
+                    >
+                        <LogOut className="w-4 h-4" />
+                    </button>
+                </div>
             </div>
         </aside>
     );

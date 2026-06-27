@@ -116,7 +116,7 @@ const products = [
         name: 'Caesar Salad', sku: 'SAL-001', barcode: '10014',
         price: 1200, category: 'Salads', stockQty: 45, lowStockThreshold: 8,
         description: 'Romaine lettuce, croutons, parmesan, and classic Caesar dressing',
-        imageUrl: 'https://images.unsplash.com/photo-1550304916-3dd4f84e91f4?auto=format&fit=crop&q=80&w=400',
+        imageUrl: 'https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&q=80&w=400',
         isAvailable: true,
     },
     {

@@ -68,7 +68,7 @@ export const updateProduct = async (req, res) => {
             if (category !== undefined) product.category = category;
             product.stockQty = stockQty ?? product.stockQty;
             product.description = description ?? product.description;
-            product.imageUrl = imageUrl ?? product.imageUrl;
+            if (imageUrl !== undefined) product.imageUrl = imageUrl;
             product.isAvailable = isAvailable ?? product.isAvailable;
             product.lowStockThreshold = lowStockThreshold ?? product.lowStockThreshold;
 
@@ -106,6 +106,30 @@ export const deleteProduct = async (req, res) => {
         if (product) {
             await product.deleteOne();
             res.json({ message: 'Product removed' });
+        } else {
+            res.status(404).json({ message: 'Product not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Upload product image
+// @route   PUT /api/products/:id/upload-image
+// @access  Private/Admin
+export const uploadProductImage = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+
+        if (product) {
+            if (req.file) {
+                const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+                product.imageUrl = imageUrl;
+                await product.save();
+                res.json({ imageUrl: imageUrl });
+            } else {
+                res.status(400).json({ message: 'No image file uploaded' });
+            }
         } else {
             res.status(404).json({ message: 'Product not found' });
         }

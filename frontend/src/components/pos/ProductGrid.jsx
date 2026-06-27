@@ -1,8 +1,15 @@
 
 import { Plus } from 'lucide-react';
 import { formatLKR } from '../../utils/money';
+import { useState } from 'react';
 
 export default function ProductGrid({ products, onAddToCart }) {
+    const [brokenImages, setBrokenImages] = useState({});
+
+    const handleImageError = (id) => {
+        setBrokenImages(prev => ({ ...prev, [id]: true }));
+    };
+
     if (!products || products.length === 0) {
         return (
         <div className="flex items-center justify-center h-72 text-gray bg-white/80 rounded-3xl border border-dashed border-border shadow-sm">
@@ -19,8 +26,13 @@ export default function ProductGrid({ products, onAddToCart }) {
             {products.map((product) => (
                 <div key={product._id || product.id} className="surface rounded-3xl p-4 flex flex-col gap-3 hover:-translate-y-0.5 hover:shadow-xl transition-all duration-200">
                     <div className="h-32 bg-light rounded-2xl flex items-center justify-center overflow-hidden relative group">
-                        {product.imageUrl ? (
-                            <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                        {product.imageUrl && !brokenImages[product._id || product.id] ? (
+                            <img
+                                src={product.imageUrl}
+                                alt={product.name}
+                                className="w-full h-full object-cover"
+                                onError={() => handleImageError(product._id || product.id)}
+                            />
                         ) : (
                             <div className="text-4xl text-gray font-bold select-none">{product.name.charAt(0)}</div>
                         )}

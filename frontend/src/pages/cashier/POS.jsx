@@ -45,7 +45,7 @@ export default function POS() {
     return (
         <div className="flex h-full relative">
             {/* Main Content Area */}
-            <div className="flex-1 lg:pr-[24rem] p-4 sm:p-6 overflow-hidden flex flex-col gap-5">
+            <div className="flex-1 lg:pr-[25.5rem] p-4 sm:p-6 overflow-hidden flex flex-col gap-5">
                 {/* Header / Filters */}
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
