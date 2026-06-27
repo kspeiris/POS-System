@@ -8,12 +8,22 @@ const api = axios.create({
     },
 });
 
+const readStoredUser = () => {
+    try {
+        const raw = localStorage.getItem('user');
+        return raw ? JSON.parse(raw) : null;
+    } catch {
+        localStorage.removeItem('user');
+        return null;
+    }
+};
+
 // Request interceptor for attaching token
 api.interceptors.request.use(
     (config) => {
-        const user = localStorage.getItem('user');
+        const user = readStoredUser();
         if (user) {
-            const { token } = JSON.parse(user);
+            const { token } = user;
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`;
             }

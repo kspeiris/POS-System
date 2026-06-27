@@ -56,9 +56,9 @@ export default function OrderDetails() {
                             {order.items.map((item, idx) => (
                                 <TableRow key={idx}>
                                     <TableCell className="font-medium text-dark">{item.name}</TableCell>
-                                    <TableCell>${item.price.toFixed(2)}</TableCell>
+                                    <TableCell>{formatLKR(item.price)}</TableCell>
                                     <TableCell>{item.qty}</TableCell>
-                                    <TableCell className="font-bold">${item.total.toFixed(2)}</TableCell>
+                                    <TableCell className="font-bold">{formatLKR(item.total)}</TableCell>
                                 </TableRow>
                             ))}
                         </Table>
@@ -79,12 +79,12 @@ export default function OrderDetails() {
                                 <span className="text-xl font-bold text-primary">{formatLKR(order.total)}</span>
                             </div>
                             <div className="flex justify-between items-center pt-4 text-sm">
-                                <span className="text-gray">Amount Paid ({order.payment.method})</span>
-                                <span className="font-medium text-dark">{formatLKR(order.payment.amountPaid)}</span>
+                                <span className="text-gray">Amount Paid ({order.payment?.method || 'cash'})</span>
+                                <span className="font-medium text-dark">{formatLKR(order.payment?.amountPaid ?? 0)}</span>
                             </div>
                             <div className="flex justify-between items-center text-sm">
                                 <span className="text-gray">Change</span>
-                                <span className="font-medium text-success">{formatLKR(order.payment.change)}</span>
+                                <span className="font-medium text-success">{formatLKR(order.payment?.change ?? 0)}</span>
                             </div>
                         </div>
                     </Card>

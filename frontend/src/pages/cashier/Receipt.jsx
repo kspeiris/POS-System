@@ -37,12 +37,12 @@ export default function Receipt() {
     const displayOrder = {
         id: order.orderNo,
         date: order.createdAt,
-        cashier: order.cashierName,
+        cashier: order.cashier?.name || order.cashierName || 'Unknown cashier',
         subtotal: order.subtotal,
         tax: order.tax,
         total: order.total,
-        amountPaid: order.payment.amountPaid,
-        change: order.payment.change,
+        amountPaid: order.payment?.amountPaid ?? 0,
+        change: order.payment?.change ?? 0,
         items: order.items.map(item => ({
             name: item.name,
             price: item.price,

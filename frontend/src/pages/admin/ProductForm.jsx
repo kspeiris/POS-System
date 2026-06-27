@@ -21,6 +21,7 @@ export default function ProductForm() {
     const [categories, setCategories] = useState([]);
     const [feedback, setFeedback] = useState('');
     const [imagePreview, setImagePreview] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({});
 
     const [formData, setFormData] = useState({
         name: '',
@@ -83,6 +84,20 @@ export default function ProductForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const nextErrors = {};
+
+        if (!formData.name.trim()) nextErrors.name = 'Product name is required';
+        if (!formData.category.trim()) nextErrors.category = 'Category is required';
+        if (!formData.price || Number.isNaN(Number(formData.price)) || Number(formData.price) < 0) {
+            nextErrors.price = 'Enter a valid price';
+        }
+        if (formData.stockQty === '' || Number.isNaN(Number(formData.stockQty)) || Number(formData.stockQty) < 0 || !Number.isInteger(Number(formData.stockQty))) {
+            nextErrors.stockQty = 'Stock must be a whole number';
+        }
+
+        setFieldErrors(nextErrors);
+        if (Object.keys(nextErrors).length > 0) return;
+
         setIsSaving(true);
         try {
             const payload = {
@@ -188,6 +203,7 @@ export default function ProductForm() {
                                     placeholder="e.g. Classic Cheeseburger"
                                     required
                                 />
+                                {fieldErrors.name && <p className="mt-1 text-sm text-danger">{fieldErrors.name}</p>}
                             </div>
                             <div className="md:col-span-2">
                                 <Input
@@ -203,11 +219,12 @@ export default function ProductForm() {
                                 name="price"
                                 type="number"
                                 step="0.01"
-                                value={formData.price}
-                                onChange={handleChange}
-                                placeholder="0.00"
-                                required
-                            />
+                                    value={formData.price}
+                                    onChange={handleChange}
+                                    placeholder="0.00"
+                                    required
+                                />
+                                {fieldErrors.price && <p className="mt-1 text-sm text-danger">{fieldErrors.price}</p>}
                             <div className="md:col-span-2 rounded-2xl bg-light p-4 text-sm text-dark-2">
                                 Price preview: <span className="font-semibold text-dark">{formatLKR(formData.price || 0)}</span>
                             </div>
@@ -225,6 +242,7 @@ export default function ProductForm() {
                                         <option key={cat._id} value={cat.name}>{cat.name}</option>
                                     ))}
                                 </select>
+                                {fieldErrors.category && <p className="mt-1 text-sm text-danger">{fieldErrors.category}</p>}
                             </div>
                             <Input
                                 label="Initial Stock"
@@ -235,6 +253,7 @@ export default function ProductForm() {
                                 placeholder="0"
                                 required
                             />
+                            {fieldErrors.stockQty && <p className="mt-1 text-sm text-danger">{fieldErrors.stockQty}</p>}
                             <div className="md:col-span-2 flex flex-col gap-1.5">
                                 <label className="text-sm font-medium text-dark-2">Description</label>
                                 <textarea
