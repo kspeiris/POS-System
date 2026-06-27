@@ -4,10 +4,19 @@ import api from '../api/axios';
 
 const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(() => {
+const readStoredUser = () => {
+    try {
         const storedUser = localStorage.getItem('user');
         return storedUser ? JSON.parse(storedUser) : null;
+    } catch {
+        localStorage.removeItem('user');
+        return null;
+    }
+};
+
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(() => {
+        return readStoredUser();
     });
     
 
@@ -27,16 +36,18 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
     };
 
-    const updateProfile = (updates) => {
-        setUser((prev) => {
-            if (!prev) {
-                return prev;
-            }
-
-            const nextUser = { ...prev, ...updates };
-            localStorage.setItem('user', JSON.stringify(nextUser));
-            return nextUser;
-        });
+    const updateProfile = async (updates) => {
+        try {
+            const { data } = await api.patch('/auth/me', updates);
+            setUser((prev) => {
+                const nextUser = prev ? { ...prev, ...data } : data;
+                localStorage.setItem('user', JSON.stringify(nextUser));
+                return nextUser;
+            });
+            return data;
+        } catch (error) {
+            throw new Error(error.response?.data?.message || 'Failed to update profile');
+        }
     };
 
     return (
