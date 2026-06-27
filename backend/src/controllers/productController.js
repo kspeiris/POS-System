@@ -63,12 +63,12 @@ export const updateProduct = async (req, res) => {
         const product = await Product.findById(req.params.id);
 
         if (product) {
-            product.name = name || product.name;
-            product.price = price || product.price;
-            product.category = category || product.category;
+            if (name !== undefined) product.name = name;
+            if (price !== undefined) product.price = price;
+            if (category !== undefined) product.category = category;
             product.stockQty = stockQty ?? product.stockQty;
-            product.description = description || product.description;
-            product.imageUrl = imageUrl || product.imageUrl;
+            product.description = description ?? product.description;
+            product.imageUrl = imageUrl ?? product.imageUrl;
             product.isAvailable = isAvailable ?? product.isAvailable;
             product.lowStockThreshold = lowStockThreshold ?? product.lowStockThreshold;
 

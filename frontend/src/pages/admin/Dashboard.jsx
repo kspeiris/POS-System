@@ -11,6 +11,7 @@ import { productApi } from '../../api/productApi';
 import Loader from '../../components/ui/Loader';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { formatLKR } from '../../utils/money';
 
 dayjs.extend(relativeTime);
 
@@ -40,10 +41,10 @@ export default function Dashboard() {
                 const avgValue = allOrders.length > 0 ? revenue / allOrders.length : 0;
 
                 setStats([
-                    { label: 'Total Revenue', value: `$${revenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, trend: '+12.5%', icon: DollarSign, color: 'text-green-600 bg-green-50' },
-                    { label: 'Total Orders', value: allOrders.length.toLocaleString(), trend: '+5.2%', icon: ShoppingBag, color: 'text-blue-600 bg-blue-50' },
-                    { label: 'Total Staff', value: usersRes.data.length.toLocaleString(), trend: '0%', icon: Users, color: 'text-purple-600 bg-purple-50' },
-                    { label: 'Avg Order Value', value: `$${avgValue.toFixed(2)}`, trend: '+3.1%', icon: TrendingUp, color: 'text-primary bg-primary/10' },
+                    { label: 'Total Revenue', value: formatLKR(revenue), trend: '+12.5%', icon: DollarSign, color: 'text-success bg-light' },
+                    { label: 'Total Orders', value: allOrders.length.toLocaleString(), trend: '+5.2%', icon: ShoppingBag, color: 'text-primary bg-primary/10' },
+                    { label: 'Total Staff', value: usersRes.data.length.toLocaleString(), trend: '0%', icon: Users, color: 'text-secondary bg-secondary/10' },
+                    { label: 'Avg Order Value', value: formatLKR(avgValue), trend: '+3.1%', icon: TrendingUp, color: 'text-primary bg-primary/10' },
                 ]);
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
@@ -63,7 +64,7 @@ export default function Dashboard() {
             <div>
                 <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Overview</p>
                 <h1 className="text-3xl font-bold text-dark mt-1">Admin Dashboard</h1>
-                <p className="text-slate-500 text-sm mt-1">Welcome back. Here's what's happening today.</p>
+                <p className="text-gray text-sm mt-1">Welcome back. Here's what's happening today.</p>
             </div>
 
             {/* Stats Grid */}
@@ -74,7 +75,7 @@ export default function Dashboard() {
                                 <div className={`p-3 rounded-xl ${stat.color}`}>
                                     <stat.icon size={24} />
                             </div>
-                            <div className={`flex items-center gap-1 text-xs font-bold ${stat.trend.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>
+                            <div className={`flex items-center gap-1 text-xs font-bold ${stat.trend.startsWith('+') ? 'text-success' : 'text-danger'}`}>
                                 {stat.trend}
                                 {stat.trend.startsWith('+') ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
                             </div>
@@ -109,21 +110,44 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Revenue Overview Chart placeholder */}
                 <Card title="Revenue Overview" subtitle="Illustrative monthly performance" className="lg:col-span-2">
-                    <div className="h-[300px] w-full flex items-end justify-between gap-2 px-4">
-                        {[40, 70, 45, 90, 65, 85, 55, 75, 50, 80, 60, 95].map((height, i) => (
-                            <div key={i} className="flex-1 group relative flex flex-col items-center gap-2">
-                                <div
-                                    className="w-full bg-primary/20 hover:bg-primary rounded-t-lg transition-all duration-500 cursor-pointer"
-                                    style={{ height: `${height}%` }}
-                                >
-                                    <div className="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-dark text-white text-[10px] py-1 px-2 rounded whitespace-nowrap transition-opacity">
-                                        ${(height * 10).toLocaleString()}
-                                    </div>
+                    {(() => {
+                        const data = [40, 70, 45, 90, 65, 85, 55, 75, 50, 80, 60, 95];
+                        const months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+                        const maxH = 220; // px
+                        const maxVal = Math.max(...data);
+                        return (
+                            <div className="h-[280px] w-full flex items-end justify-between gap-2 px-2 pb-6 relative">
+                                {/* Y-axis grid lines */}
+                                <div className="absolute inset-x-2 bottom-6 top-0 flex flex-col justify-between pointer-events-none">
+                                    {[100, 75, 50, 25, 0].map(pct => (
+                                        <div key={pct} className="w-full border-t border-border/50 flex items-center">
+                                            <span className="text-[9px] text-gray -mt-3 -ml-1 w-6 text-right">{pct}</span>
+                                        </div>
+                                    ))}
                                 </div>
-                                <span className="text-[10px] text-gray-400 font-medium">{['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'][i]}</span>
+                                {data.map((val, i) => {
+                                    const barH = Math.round((val / maxVal) * maxH);
+                                    return (
+                                        <div key={i} className="flex-1 group relative flex flex-col items-center gap-1 justify-end" style={{ height: `${maxH}px` }}>
+                                            {/* Tooltip */}
+                                            <div className="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-dark text-white text-[10px] py-1 px-2 rounded-lg whitespace-nowrap transition-opacity z-10 shadow-lg">
+                                                LKR {(val * 1000).toLocaleString()}
+                                            </div>
+                                            {/* Bar */}
+                                            <div
+                                                className="w-full rounded-t-lg transition-all duration-500 cursor-pointer hover:opacity-80"
+                                                style={{
+                                                    height: `${barH}px`,
+                                                    background: `linear-gradient(to top, var(--primary), color-mix(in srgb, var(--primary) 60%, transparent))`
+                                                }}
+                                            />
+                                            <span className="text-[10px] text-gray font-medium absolute -bottom-5">{months[i]}</span>
+                                        </div>
+                                    );
+                                })}
                             </div>
-                        ))}
-                    </div>
+                        );
+                    })()}
                 </Card>
 
                 {/* Popular Items */}
@@ -138,14 +162,14 @@ export default function Dashboard() {
                         ].map((item, idx) => (
                             <div key={idx} className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-xs font-bold text-gray-400">
+                                    <div className="w-8 h-8 rounded-lg bg-light flex items-center justify-center text-xs font-bold text-gray">
                                         {idx + 1}
                                     </div>
                                     <span className="text-sm font-medium text-dark">{item.name}</span>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-sm font-bold text-dark">{item.sales}</p>
-                                    <p className={`text-[10px] font-bold ${item.growth >= 0 ? 'text-green-600' : 'text-danger'}`}>
+                                    <p className={`text-[10px] font-bold ${item.growth >= 0 ? 'text-success' : 'text-danger'}`}>
                                         {item.growth >= 0 ? '+' : ''}{item.growth}%
                                     </p>
                                 </div>
@@ -162,7 +186,7 @@ export default function Dashboard() {
                         <TableRow key={order._id}>
                             <TableCell className="font-bold text-primary">{order.orderNo}</TableCell>
                             <TableCell>Walk-in</TableCell>
-                            <TableCell className="font-bold">${order.total.toFixed(2)}</TableCell>
+                            <TableCell className="font-bold">{formatLKR(order.total)}</TableCell>
                             <TableCell>
                                 <Badge variant={
                                     order.status === 'completed' ? 'success' :

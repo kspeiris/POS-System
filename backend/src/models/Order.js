@@ -40,6 +40,11 @@ const orderSchema = mongoose.Schema(
             required: true,
             default: 0.0,
         },
+        taxBreakdown: [{
+            name: { type: String },
+            rate: { type: Number },
+            amount: { type: Number },
+        }],
         discount: {
             type: Number,
             required: true,
@@ -70,8 +75,32 @@ const orderSchema = mongoose.Schema(
         status: {
             type: String,
             required: true,
-            enum: ['completed', 'pending', 'cancelled'],
+            enum: ['completed', 'pending', 'cancelled', 'refunded', 'voided'],
             default: 'completed',
+        },
+        voidedAt: {
+            type: Date,
+        },
+        voidedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        voidReason: {
+            type: String,
+        },
+        refundedAt: {
+            type: Date,
+        },
+        refundedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        refundAmount: {
+            type: Number,
+            default: 0.0,
+        },
+        refundReason: {
+            type: String,
         },
     },
     {

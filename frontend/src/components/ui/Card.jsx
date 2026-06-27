@@ -15,9 +15,9 @@ export default function Card({
             className
         )}>
             {(title || subtitle) && (
-                <div className="p-6 border-b border-slate-100/80">
+                <div className="p-6 border-b border-border">
                     {title && <h3 className="text-lg font-bold text-dark">{title}</h3>}
-                    {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+                    {subtitle && <p className="text-sm text-gray mt-1">{subtitle}</p>}
                 </div>
             )}
             <div className={twMerge(
@@ -27,7 +27,7 @@ export default function Card({
                 {children}
             </div>
             {footer && (
-                <div className="p-4 bg-slate-50/80 border-t border-slate-100/80">
+                <div className="p-4 bg-light border-t border-border">
                     {footer}
                 </div>
             )}

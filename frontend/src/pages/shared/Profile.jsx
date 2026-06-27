@@ -17,7 +17,7 @@ export default function Profile() {
                 <h1 className="text-2xl font-bold text-dark">My Profile</h1>
                 <Button
                     variant="ghost"
-                    className="text-red-500 hover:bg-red-50"
+                    className="text-danger hover:bg-light-red"
                     onClick={logout}
                 >
                     <LogOut size={18} className="mr-2" />
@@ -33,12 +33,14 @@ export default function Profile() {
                             <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary border-4 border-white shadow-lg overflow-hidden">
                                 <User size={48} />
                             </div>
-                            <button className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-md border border-gray-100 text-gray-400 hover:text-primary transition-all">
+                            <button
+                    className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-md border border-border text-gray hover:text-primary transition-all"
+                >
                                 <Camera size={16} />
                             </button>
                         </div>
                         <h2 className="text-xl font-bold text-dark">{user?.name}</h2>
-                        <p className="text-sm text-gray-500 mb-4">{user?.email}</p>
+                        <p className="text-sm text-gray mb-4">{user?.email}</p>
                         <Badge variant={user?.role === 'admin' ? 'primary' : 'neutral'}>
                             {user?.role}
                         </Badge>
@@ -68,14 +70,14 @@ export default function Profile() {
 
                     <Card title="Security" subtitle="Manage your password and authentication">
                         <div className="space-y-4">
-                            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <div className="flex items-center justify-between p-4 bg-light rounded-xl border border-border">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white rounded-lg text-gray-400">
+                                    <div className="p-2 bg-white rounded-lg text-gray">
                                         <Key size={20} />
                                     </div>
                                     <div>
                                         <p className="font-bold text-dark text-sm">Change Password</p>
-                                        <p className="text-xs text-gray-500">Last changed 3 months ago</p>
+                                        <p className="text-xs text-gray">Last changed 3 months ago</p>
                                     </div>
                                 </div>
                                 <Button variant="secondary" size="sm">Update</Button>

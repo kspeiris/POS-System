@@ -52,16 +52,16 @@ export default function POS() {
                         <div>
                             <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Checkout</p>
                             <h1 className="text-3xl font-bold text-dark mt-1">Menu</h1>
-                            <p className="text-sm text-slate-500">Search and add products quickly.</p>
+                            <p className="text-sm text-gray">Search and add products quickly.</p>
                         </div>
                         <div className="relative w-full sm:w-80">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray w-5 h-5" />
                             <input
                                 type="text"
                                 placeholder="Search products..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-200 bg-white/90 shadow-sm focus:ring-2 focus:ring-primary/20 transition-all"
+                                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-border bg-white/90 shadow-sm focus:ring-2 focus:ring-primary/20 transition-all"
                             />
                         </div>
                     </div>
@@ -73,9 +73,9 @@ export default function POS() {
                                 key={category}
                                 onClick={() => setSelectedCategory(category)}
                                 className={`px-4 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${selectedCategory === category
-                                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                                    : 'bg-white/80 text-slate-600 hover:bg-slate-100 border border-slate-200'
-                                    }`}
+                                        ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                                        : 'bg-white/80 text-gray hover:bg-light border border-border'
+                                        }`}
                             >
                                 {category}
                             </button>

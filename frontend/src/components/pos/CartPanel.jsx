@@ -73,6 +73,7 @@ export default function CartPanel() {
     };
 
     return (
+        <>
         <div className="bg-white/90 backdrop-blur-xl h-[calc(100vh-4rem)] flex flex-col border-l border-border/70 shadow-card fixed right-0 top-16 w-full max-w-[24rem] z-20">
 
             {/* Header */}
@@ -159,7 +160,7 @@ export default function CartPanel() {
                         <span>Subtotal</span>
                         <span>{formatLKR(subtotal)}</span>
                     </div>
-                    {taxBreakdown.map((t, idx) => (
+                    {(taxBreakdown || []).map((t, idx) => (
                         <div key={t.name + idx} className="flex justify-between text-gray text-sm">
                             <span>Tax ({t.name})</span>
                             <span>{formatLKR(t.amount)}</span>
@@ -189,15 +190,16 @@ export default function CartPanel() {
                     </Button>
                 </div>
             </div>
-
-            <CheckoutModal
-                key={`${isCheckoutOpen}-${total}`}
-                isOpen={isCheckoutOpen}
-                onClose={() => setIsCheckoutOpen(false)}
-                total={total}
-                onConfirm={handleCheckoutConfirm}
-                isProcessing={isProcessing}
-            />
         </div>
+
+        <CheckoutModal
+            key={`${isCheckoutOpen}-${total}`}
+            isOpen={isCheckoutOpen}
+            onClose={() => setIsCheckoutOpen(false)}
+            total={total}
+            onConfirm={handleCheckoutConfirm}
+            isProcessing={isProcessing}
+        />
+        </>
     );
 }

@@ -8,9 +8,9 @@ export default function Table({
     containerClassName
 }) {
     return (
-        <div className={twMerge("w-full overflow-x-auto rounded-3xl border border-slate-100 bg-white/90 shadow-sm", containerClassName)}>
+        <div className={twMerge("w-full overflow-x-auto rounded-3xl border border-border bg-white shadow-sm", containerClassName)}>
             <table className={twMerge("w-full text-left text-sm", className)}>
-                <thead className="bg-slate-50/80 text-slate-500 font-medium border-b border-slate-100">
+                <thead className="bg-light text-gray font-medium border-b border-border">
                     <tr>
                         {headers.map((header, idx) => (
                             <th key={idx} className="px-6 py-4 font-semibold uppercase tracking-[0.14em] text-[11px]">
@@ -19,7 +19,7 @@ export default function Table({
                         ))}
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-border">
                     {children}
                 </tbody>
             </table>
@@ -29,7 +29,7 @@ export default function Table({
 
 export function TableRow({ children, className }) {
     return (
-        <tr className={twMerge("hover:bg-slate-50/80 transition-colors", className)}>
+        <tr className={twMerge("hover:bg-light transition-colors", className)}>
             {children}
         </tr>
     );
@@ -37,7 +37,7 @@ export function TableRow({ children, className }) {
 
 export function TableCell({ children, className }) {
     return (
-        <td className={twMerge("px-6 py-4 text-slate-600", className)}>
+        <td className={twMerge("px-6 py-4 text-dark", className)}>
             {children}
         </td>
     );

@@ -12,10 +12,10 @@ export default function Button({
 }) {
     const variants = {
         primary: 'bg-primary text-white hover:bg-primary-hover shadow-lg shadow-primary/15',
-        secondary: 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50',
-        danger: 'bg-red-600 text-white hover:bg-red-700 shadow-lg shadow-red-600/15',
-        success: 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/15',
-        ghost: 'bg-transparent text-slate-600 hover:bg-slate-100',
+        secondary: 'bg-white text-dark border border-border hover:bg-light',
+        danger: 'bg-danger text-white hover:opacity-90 shadow-lg shadow-danger/15',
+        success: 'bg-success text-white hover:opacity-90 shadow-lg shadow-success/15',
+        ghost: 'bg-transparent text-gray hover:bg-light',
     };
 
     const sizes = {

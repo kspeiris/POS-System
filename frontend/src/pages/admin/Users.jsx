@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Mail, Shield, User } from 'lucide-react';
+import dayjs from 'dayjs';
 import Card from '../../components/ui/Card';
 import Table, { TableRow, TableCell } from '../../components/ui/Table';
 import Button from '../../components/ui/Button';
@@ -64,7 +65,7 @@ export default function Users() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-dark">User Management</h1>
-                    <p className="text-gray-500 text-sm">Manage staff access and permissions</p>
+                    <p className="text-gray text-sm">Manage staff access and permissions</p>
                 </div>
                 <Button className="flex items-center gap-2" onClick={() => openModal()}>
                     <Plus size={18} />
@@ -95,11 +96,11 @@ export default function Users() {
                                     {user.isActive ? 'Active' : 'Inactive'}
                                 </Badge>
                             </TableCell>
-                            <TableCell className="text-gray-500 text-xs">{dayjs(user.createdAt).format('MMM D, YYYY')}</TableCell>
+                            <TableCell className="text-gray">{dayjs(user.createdAt).format('MMM D, YYYY')}</TableCell>
                             <TableCell>
                                 <div className="flex items-center gap-2">
                                     <button
-                                        className="p-2 text-gray-400 hover:text-primary transition-colors"
+                                        className="p-2 text-gray hover:text-primary transition-colors"
                                         onClick={() => openModal(user)}
                                     >
                                         <Edit2 size={18} />
@@ -131,12 +132,12 @@ export default function Users() {
                         required
                     />
                     <div className="flex flex-col gap-1.5">
-                        <label className="text-sm font-medium text-gray-700">Role</label>
-                        <select
-                            value={formData.role}
-                            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                            className="w-full rounded-lg border border-gray-200 bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                        >
+<label className="text-sm font-medium text-dark">Role</label>
+                                <select
+                                    value={formData.role}
+                                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                                    className="w-full rounded-lg border border-border bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                >
                             {ROLES.map(role => (
                                 <option key={role} value={role}>{role}</option>
                             ))}

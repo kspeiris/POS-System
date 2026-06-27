@@ -57,8 +57,8 @@ export const updateUserStatus = async (req, res) => {
 
         if (user) {
             user.isActive = req.body.isActive ?? user.isActive;
-            user.role = req.body.role || user.role;
-            user.name = req.body.name || user.name;
+            user.role = req.body.role ?? user.role;
+            user.name = req.body.name ?? user.name;
 
             if (req.body.password) {
                 user.password = req.body.password;

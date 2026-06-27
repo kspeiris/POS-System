@@ -62,7 +62,7 @@ export default function Login() {
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl font-bold text-dark mb-2">Welcome back</h1>
-                <p className="text-slate-500 mb-8">Sign in to access cashier tools, inventory, and reporting.</p>
+                <p className="text-gray mb-8">Sign in to access cashier tools, inventory, and reporting.</p>
 
                 <div className="glass p-8 sm:p-10 rounded-[2rem] text-left">
                     {serverError && (

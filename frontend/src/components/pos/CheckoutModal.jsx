@@ -90,7 +90,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onConfirm, isPro
                                         if (amountError) setAmountError('');
                                     }}
                                     className={clsx(
-                                        "w-full bg-light border-none rounded-2xl py-4 pl-8 pr-4 text-2xl font-bold focus:ring-2 focus:ring-primary transition-all",
+                                        "w-full bg-light border-none rounded-2xl py-4 pl-14 pr-4 text-2xl font-bold focus:ring-2 focus:ring-primary transition-all",
                                         amountError ? "border-2 border-danger" : ""
                                     )}
                                     placeholder="0.00"

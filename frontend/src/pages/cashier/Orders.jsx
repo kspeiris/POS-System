@@ -11,6 +11,7 @@ import Loader from '../../components/ui/Loader';
 import dayjs from 'dayjs';
 
 import { orderApi } from '../../api/orderApi';
+import { formatLKR } from '../../utils/money';
 
 export default function Orders() {
     const navigate = useNavigate();
@@ -43,7 +44,7 @@ export default function Orders() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-dark">Order History</h1>
-                    <p className="text-gray-500 text-sm">View and manage all your past orders</p>
+                    <p className="text-gray text-sm">View and manage all your past orders</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <Button variant="secondary" className="flex items-center gap-2">
@@ -54,7 +55,7 @@ export default function Orders() {
             </div>
 
             <Card className="flex flex-col">
-                <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div className="p-4 border-b border-border flex flex-col md:flex-row gap-4 items-center justify-between">
                     <div className="relative w-full md:w-96">
                         <Input
                             placeholder="Search by order ID..."
@@ -77,7 +78,7 @@ export default function Orders() {
                             <TableCell className="font-bold text-primary">{order.orderNo}</TableCell>
                             <TableCell>{dayjs(order.createdAt).format('MMM D, YYYY HH:mm')}</TableCell>
                             <TableCell>{order.items.length} items</TableCell>
-                            <TableCell className="font-bold">${order.total.toFixed(2)}</TableCell>
+                            <TableCell className="font-bold text-primary">{formatLKR(order.total)}</TableCell>
                             <TableCell>
                                 <Badge variant={
                                     order.status === 'completed' ? 'success' :
@@ -91,14 +92,14 @@ export default function Orders() {
                                 <div className="flex items-center gap-2">
                                     <button
                                         onClick={() => navigate(`/orders/${order._id}`)}
-                                        className="p-2 text-gray-400 hover:text-primary transition-colors"
+                                        className="p-2 text-gray hover:text-primary transition-colors"
                                         title="View Details"
                                     >
                                         <Eye size={18} />
                                     </button>
                                     <button
                                         onClick={() => window.open(`/orders/${order._id}/receipt`, '_blank')}
-                                        className="p-2 text-gray-400 hover:text-dark transition-colors"
+                                        className="p-2 text-gray hover:text-dark transition-colors"
                                         title="Print Receipt"
                                     >
                                         <Printer size={18} />
@@ -110,7 +111,7 @@ export default function Orders() {
                 </Table>
 
                 {filteredOrders.length === 0 && (
-                    <div className="p-12 text-center text-gray-500">
+                    <div className="p-12 text-center text-gray">
                         No orders found matching your search.
                     </div>
                 )}

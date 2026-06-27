@@ -74,7 +74,7 @@ export default function Categories() {
                 <div>
                     <p className="text-sm font-semibold text-primary uppercase tracking-[0.18em]">Catalog</p>
                     <h1 className="text-3xl font-bold text-dark mt-1">Categories</h1>
-                    <p className="text-slate-500 text-sm">Organize your menu into groups.</p>
+                    <p className="text-gray text-sm">Organize your menu into groups.</p>
                 </div>
                 <Button className="flex items-center gap-2" onClick={() => openModal()}>
                     <Plus size={18} />
@@ -86,24 +86,24 @@ export default function Categories() {
                 <Table headers={['Category Name', 'Description', 'Actions']}>
                     {categories.length === 0 ? (
                         <tr>
-                            <td className="px-6 py-10 text-slate-500" colSpan={3}>
+                            <td className="px-6 py-10 text-gray" colSpan={3}>
                                 No categories yet. Add one to start organizing products.
                             </td>
                         </tr>
                     ) : categories.map((cat) => (
                         <TableRow key={cat._id}>
                             <TableCell className="font-bold text-dark">{cat.name}</TableCell>
-                            <TableCell className="text-gray-500 max-w-xs truncate">{cat.description || '-'}</TableCell>
+                            <TableCell className="text-gray max-w-xs truncate">{cat.description || '-'}</TableCell>
                             <TableCell>
                                 <div className="flex items-center gap-2">
                                     <button
-                                        className="p-2 text-gray-400 hover:text-primary transition-colors"
+                                        className="p-2 text-gray hover:text-primary transition-colors"
                                         onClick={() => openModal(cat)}
                                     >
                                         <Edit2 size={18} />
                                     </button>
                                     <button
-                                        className="p-2 text-gray-400 hover:text-danger transition-colors"
+                                        className="p-2 text-gray hover:text-danger transition-colors"
                                         onClick={() => handleDelete(cat._id)}
                                     >
                                         <Trash2 size={18} />
@@ -128,12 +128,12 @@ export default function Categories() {
                         required
                     />
                     <div className="flex flex-col gap-1.5">
-                        <label className="text-sm font-medium text-gray-700">Description</label>
+                        <label className="text-sm font-medium text-dark">Description</label>
                         <textarea
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                             rows={3}
-                            className="w-full rounded-lg border border-gray-200 bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                            className="w-full rounded-lg border border-border bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                         />
                     </div>
                     <div className="pt-4 flex gap-3">

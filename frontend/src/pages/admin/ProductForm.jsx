@@ -15,6 +15,8 @@ export default function ProductForm() {
     const navigate = useNavigate();
     const isEdit = !!id;
 
+    const [fieldErrors, setFieldErrors] = useState({});
+
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [categories, setCategories] = useState([]);
@@ -115,14 +117,14 @@ export default function ProductForm() {
                 <div className="md:col-span-1 space-y-6">
                     <Card title="Product Image" subtitle="Use a clean image that is easy to scan">
                         <div className="flex flex-col items-center gap-4">
-                            <div className="w-full aspect-square rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 group hover:border-primary hover:bg-primary/5 transition-all cursor-pointer">
-                                <Upload size={32} className="mb-2 group-hover:text-primary transition-colors" />
-                                <span className="text-xs font-medium group-hover:text-primary transition-colors">Click to Upload</span>
-                                <span className="text-[10px]">PNG, JPG up to 5MB</span>
-                            </div>
-                            <p className="text-xs text-center text-gray-500">
-                                Recommend style: Clear image with simple background.
-                            </p>
+<div className="w-full aspect-square rounded-3xl bg-light border-2 border-dashed border-border flex flex-col items-center justify-center text-gray group hover:border-primary hover:bg-primary/5 transition-all cursor-pointer">
+                                    <Upload size={32} className="mb-2 group-hover:text-primary transition-colors" />
+                                    <span className="text-xs font-medium group-hover:text-primary transition-colors">Click to Upload</span>
+                                    <span className="text-[10px]">PNG, JPG up to 5MB</span>
+                                </div>
+<p className="text-xs text-center text-gray">
+                                        Recommend style: Clear image with simple background.
+                                    </p>
                         </div>
                     </Card>
 
@@ -137,9 +139,9 @@ export default function ProductForm() {
                                         checked={formData.isAvailable}
                                         onChange={handleChange}
                                     />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                    <div className="w-11 h-6 bg-light peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                                 </div>
-                                <span className="text-sm font-medium text-gray-700">Display in Menu</span>
+                                <span className="text-sm font-medium text-dark">Display in Menu</span>
                             </label>
                         </div>
                     </Card>
@@ -169,7 +171,7 @@ export default function ProductForm() {
                                 />
                             </div>
                             <Input
-                                label="Price ($)"
+                                label="Price (LKR)"
                                 name="price"
                                 type="number"
                                 step="0.01"
@@ -179,12 +181,12 @@ export default function ProductForm() {
                                 required
                             />
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-sm font-medium text-gray-700">Category</label>
+                                <label className="text-sm font-medium text-dark">Category</label>
                                 <select
                                     name="category"
                                     value={formData.category}
                                     onChange={handleChange}
-                                    className="w-full rounded-lg border border-gray-200 bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                    className="w-full rounded-lg border border-border bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                                     required
                                 >
                                     <option value="">Select Category</option>
@@ -212,13 +214,13 @@ export default function ProductForm() {
                                 placeholder="10"
                             />
                             <div className="md:col-span-2 flex flex-col gap-1.5">
-                                <label className="text-sm font-medium text-gray-700">Description</label>
+                                <label className="text-sm font-medium text-dark">Description</label>
                                 <textarea
                                     name="description"
                                     value={formData.description}
                                     onChange={handleChange}
                                     rows={4}
-                                    className="w-full rounded-lg border border-gray-200 bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                    className="w-full rounded-lg border border-border bg-white py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                                     placeholder="Brief description of the product..."
                                 />
                             </div>

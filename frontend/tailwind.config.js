@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -8,16 +9,17 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#006ce1",
-          hover: "#0056b3",
+          DEFAULT: "var(--primary)",
+          hover: "var(--primary-hover)",
         },
-        secondary: "#ec4899",
-        dark: "#1e293b",
-        light: "#f8fafc",
-        gray: "#64748b",
-        white: "#ffffff",
-        danger: "#ef4444",
-        success: "#22c55e",
+        secondary: "var(--secondary)",
+        dark: "var(--dark)",
+        light: "var(--light)",
+        gray: "var(--gray)",
+        white: "var(--white)",
+        danger: "var(--danger)",
+        success: "var(--success)",
+        border: "var(--border)",
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

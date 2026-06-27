@@ -40,11 +40,11 @@ export default function Modal({
 
             {/* Content */}
             <div className={`relative w-full ${sizes[size]} surface rounded-3xl animate-in zoom-in-95 duration-200 overflow-hidden`}>
-                <div className="flex items-center justify-between p-6 border-b border-slate-100/80">
+                <div className="flex items-center justify-between p-6 border-b border-border">
                     <h3 className="text-xl font-bold text-dark">{title}</h3>
                     <button
                         onClick={onClose}
-                        className="p-2 rounded-xl hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-600"
+                        className="p-2 rounded-xl hover:bg-light transition-colors text-gray hover:text-dark"
                     >
                         <X size={20} />
                     </button>
